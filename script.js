@@ -319,6 +319,154 @@ class PerformanceManager {
     }
 }
 
+// Projects Manager
+class ProjectsManager {
+    constructor() {
+        this.projects = [
+            {
+                id: 'sentinel',
+                title: 'Sentinel',
+                description: 'Real-time OSINT intelligence platform with autonomous content discovery, hybrid retrieval (vector + knowledge graph), and AI-powered brief generation from 40+ live sources.',
+                image: null, // Will show placeholder
+                tags: ['ai', 'python', 'osint', 'nlp', 'web'],
+                github: 'https://github.com/yourusername/sentinel',
+                devpost: null,
+                featured: true
+            },
+            {
+                id: 'fairusebot',
+                title: 'FairUseBot',
+                description: 'A RAG-powered chatbot that provides personalized copyright and fair use guidance with Creative Commons music search for different user roles.',
+                image: null,
+                tags: ['ai', 'rag', 'web', 'react', 'nlp'],
+                github: 'https://github.com/yourusername/fairusebot',
+                devpost: 'https://devpost.com/software/fairusebot',
+                featured: true
+            }
+            // Add more projects here as needed
+        ];
+        
+        this.currentFilter = 'all';
+        this.init();
+    }
+
+    init() {
+        this.renderProjects();
+        this.setupFilters();
+    }
+
+    renderProjects() {
+        const grid = document.getElementById('projectsGrid');
+        if (!grid) return;
+
+        // Sort projects: featured first, then by order
+        const sortedProjects = [...this.projects].sort((a, b) => {
+            if (a.featured && !b.featured) return -1;
+            if (!a.featured && b.featured) return 1;
+            return 0;
+        });
+
+        grid.innerHTML = sortedProjects.map(project => this.createProjectCard(project)).join('');
+        
+        // Add click handlers for project tags
+        this.setupProjectTagHandlers();
+    }
+
+    createProjectCard(project) {
+        const githubIcon = project.github ? `<a href="${project.github}" target="_blank" rel="noopener" class="project-link" title="GitHub">⚡</a>` : '';
+        const devpostIcon = project.devpost ? `<a href="${project.devpost}" target="_blank" rel="noopener" class="project-link" title="Devpost">🏆</a>` : '';
+        
+        const imageContent = project.image 
+            ? `<img src="${project.image}" alt="${project.title}">`
+            : '🚀';
+
+        const tagsHtml = project.tags.map(tag => 
+            `<span class="project-tag" data-tag="${tag}">${tag}</span>`
+        ).join('');
+
+        return `
+            <div class="project-card ${project.featured ? 'featured' : ''}" data-tags="${project.tags.join(' ')}">
+                <div class="project-image">
+                    ${imageContent}
+                </div>
+                <div class="project-content">
+                    <div class="project-header">
+                        <h3 class="project-title">${project.title}</h3>
+                        <div class="project-links">
+                            ${githubIcon}
+                            ${devpostIcon}
+                        </div>
+                    </div>
+                    <p class="project-description">${project.description}</p>
+                    <div class="project-tags">
+                        ${tagsHtml}
+                    </div>
+                </div>
+            </div>
+        `;
+    }
+
+    setupFilters() {
+        const filterTags = document.querySelectorAll('.filter-tag');
+        
+        filterTags.forEach(tag => {
+            tag.addEventListener('click', () => {
+                const filter = tag.dataset.filter;
+                this.filterProjects(filter);
+                
+                // Update active filter
+                filterTags.forEach(t => t.classList.remove('active'));
+                tag.classList.add('active');
+            });
+        });
+    }
+
+    setupProjectTagHandlers() {
+        const projectTags = document.querySelectorAll('.project-tag');
+        
+        projectTags.forEach(tag => {
+            tag.addEventListener('click', (e) => {
+                e.stopPropagation();
+                const tagName = tag.dataset.tag;
+                this.filterProjects(tagName);
+                
+                // Update filter buttons
+                const filterButtons = document.querySelectorAll('.filter-tag');
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                const matchingFilter = document.querySelector(`[data-filter="${tagName}"]`);
+                if (matchingFilter) {
+                    matchingFilter.classList.add('active');
+                }
+            });
+        });
+    }
+
+    filterProjects(filter) {
+        this.currentFilter = filter;
+        const cards = document.querySelectorAll('.project-card');
+        
+        cards.forEach((card, index) => {
+            const cardTags = card.dataset.tags.split(' ');
+            const shouldShow = filter === 'all' || cardTags.includes(filter);
+            
+            // Add stagger delay for animation
+            setTimeout(() => {
+                if (shouldShow) {
+                    card.classList.remove('hidden');
+                } else {
+                    card.classList.add('hidden');
+                }
+            }, index * 50);
+        });
+    }
+
+    addProject(project) {
+        // Add new project to the beginning (top)
+        this.projects.unshift(project);
+        this.renderProjects();
+    }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
@@ -328,6 +476,7 @@ document.addEventListener('DOMContentLoaded', () => {
     new SmoothScroll();
     new ButtonEffects();
     new PerformanceManager();
+    new ProjectsManager();
 
     // Handle initial URL
     const currentHash = window.location.hash.substring(1);

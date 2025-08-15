@@ -91,9 +91,25 @@
 
     <!-- Projects Section -->
     <section class="projects-section" id="projects">
-        <div class="section-content">
-            <h2>Projects</h2>
-            <p>Coming soon...</p>
+        <div class="projects-container">
+            <h2 class="projects-title">projects</h2>
+
+            <!-- Filter Tags -->
+            <div class="filter-container">
+                <button class="filter-tag active" data-filter="all">all</button>
+                <button class="filter-tag" data-filter="ai">ai</button>
+                <button class="filter-tag" data-filter="web">web</button>
+                <button class="filter-tag" data-filter="python">python</button>
+                <button class="filter-tag" data-filter="react">react</button>
+                <button class="filter-tag" data-filter="osint">osint</button>
+                <button class="filter-tag" data-filter="rag">rag</button>
+                <button class="filter-tag" data-filter="nlp">nlp</button>
+            </div>
+
+            <!-- Projects Grid -->
+            <div class="projects-grid" id="projectsGrid">
+                <!-- Projects will be dynamically inserted here -->
+            </div>
         </div>
     </section>
 
