@@ -47,7 +47,9 @@ class ScrollEffects {
         this.homeSection = document.getElementById('home');
         this.transitionSection = document.getElementById('transition');
         this.contentReveal = document.querySelector('.content-reveal');
+        this.nav = document.querySelector('.nav');
         this.lastScrollY = 0;
+        this.isHomeSection = true;
         
         this.init();
     }
@@ -55,9 +57,11 @@ class ScrollEffects {
     init() {
         window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
         window.addEventListener('resize', () => this.handleResize());
+        window.addEventListener('mousemove', (e) => this.handleMouseMove(e));
         
         // Initial check
         this.handleScroll();
+        this.updateNavVisibility();
     }
 
     handleScroll() {
@@ -78,7 +82,49 @@ class ScrollEffects {
             this.contentReveal.classList.add('visible');
         }
         
+        // Update navbar visibility
+        this.updateNavVisibility();
+        
         this.lastScrollY = scrollY;
+    }
+
+    handleMouseMove(e) {
+        // Only handle mouse hover in home experience, not in other sections
+        if (this.isHomeSection) {
+            // Show navbar when mouse is near the top of the screen
+            if (e.clientY < 100) {
+                this.nav.classList.add('visible');
+            } else if (e.clientY > 150) {
+                // Only hide if we're not at the very top of the page
+                if (window.scrollY > 50) {
+                    this.nav.classList.remove('visible');
+                }
+            }
+        }
+    }
+
+    updateNavVisibility() {
+        const scrollY = window.scrollY;
+        const windowHeight = window.innerHeight;
+        
+        // Check if we're still in the home experience (home + transition sections)
+        // Only show navbar always when we reach other sections (about, projects, resume)
+        const transitionEnd = this.transitionSection.offsetTop + this.transitionSection.offsetHeight;
+        this.isHomeSection = scrollY < transitionEnd - windowHeight * 0.2;
+        
+        if (this.isHomeSection) {
+            // In home experience: show only at very top or on mouse hover
+            if (scrollY < 50) {
+                this.nav.classList.add('visible');
+            } else {
+                this.nav.classList.remove('visible');
+            }
+            this.nav.classList.remove('always-visible');
+        } else {
+            // Outside home experience: always show
+            this.nav.classList.add('always-visible');
+            this.nav.classList.remove('visible');
+        }
     }
 
     updateHomeSection(progress) {

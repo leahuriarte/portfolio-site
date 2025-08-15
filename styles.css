@@ -22,7 +22,7 @@ body {
     position: fixed;
     top: 30px;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translateX(-50%) translateY(-100px);
     display: flex;
     gap: 20px;
     z-index: 1000;
@@ -34,6 +34,18 @@ body {
     box-shadow: 0 0 30px rgba(156, 201, 127, 0.4),
                 0 0 60px rgba(156, 201, 127, 0.2),
                 0 8px 32px rgba(0, 0, 0, 0.3);
+    transition: transform 0.3s ease;
+    opacity: 0;
+}
+
+.nav.visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.nav.always-visible {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
 }
 
 .nav-btn {
@@ -124,7 +136,8 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    gap: 60px;
+    justify-content: center;
+    height: 100vh;
 }
 
 .main-title {
@@ -158,8 +171,13 @@ body {
 }
 
 .scroll-indicator {
+    position: absolute;
+    bottom: 40px;
+    left: 50%;
+    transform: translateX(-50%);
     opacity: 0.7;
     animation: bounce 2s infinite;
+    z-index: 4;
 }
 
 .scroll-arrow {
@@ -415,6 +433,12 @@ body {
         box-shadow: 0 0 20px rgba(156, 201, 127, 0.3),
                     0 0 40px rgba(156, 201, 127, 0.15),
                     0 4px 16px rgba(0, 0, 0, 0.3);
+        transform: translateX(-50%) translateY(-80px);
+    }
+
+    .nav.visible,
+    .nav.always-visible {
+        transform: translateX(-50%) translateY(0);
     }
 
     .nav-btn {
@@ -481,6 +505,12 @@ body {
         padding: 4px;
         width: calc(100% - 40px);
         max-width: 350px;
+        transform: translateX(-50%) translateY(-70px);
+    }
+
+    .nav.visible,
+    .nav.always-visible {
+        transform: translateX(-50%) translateY(0);
     }
 
     .nav-btn {
