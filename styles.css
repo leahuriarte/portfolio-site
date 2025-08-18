@@ -147,7 +147,7 @@ body {
 }
 
 .title-line:first-child {
-    transform: translateX(-30%);
+    transform: translateX(-40%);
 }
 
 .title-line:last-child {
@@ -714,19 +714,13 @@ body {
         padding: 10px 14px;
         font-size: 13px;
         white-space: nowrap;
-        outline: none;
         border-radius: 18px;
         min-width: auto;
         flex-shrink: 0;
     }
 
-    .nav-btn:focus {
-        outline: 2px solid #9CC97F;
-        outline-offset: 1px;
-    }
-
     .main-title {
-        font-size: clamp(4.5rem, 18vw, 9rem);
+        font-size: clamp(7rem, 25vw, 14rem);
     }
 
     .transition-content {
