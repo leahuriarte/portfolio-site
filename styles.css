@@ -805,7 +805,7 @@ body {
     }
 
     .status-item h2 {
-        font-size: clamp(1.8rem, 9vw, 2.5rem);
+        font-size: clamp(2rem, 10vw, 3rem);
     }
 
     .about-container {
