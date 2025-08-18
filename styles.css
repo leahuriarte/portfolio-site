@@ -105,7 +105,6 @@ body {
     width: 100%;
     height: 100%;
     z-index: 1;
-    filter: drop-shadow(0 0 50px rgba(156, 201, 127, 0.4)) drop-shadow(0 0 100px rgba(156, 201, 127, 0.2)) drop-shadow(0 0 150px rgba(156, 201, 127, 0.1));
 }
 
 .background-image {
@@ -118,19 +117,6 @@ body {
     transition: transform 1s ease-out;
 }
 
-.background-overlay {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: linear-gradient(180deg,
-            rgba(15, 66, 63, 0.3) 0%,
-            rgba(15, 66, 63, 0.5) 50%,
-            rgba(15, 66, 63, 0.8) 100%);
-    /* Ensure no inward shadows or glows */
-    box-shadow: none;
-}
 
 .home-content {
     position: relative;
