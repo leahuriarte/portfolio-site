@@ -694,9 +694,10 @@ body {
 
     .nav {
         top: 20px;
-        gap: 6px;
-        padding: 4px;
-        width: auto;
+        gap: 4px;
+        padding: 6px 8px;
+        width: fit-content;
+        min-width: auto;
         max-width: calc(100vw - 40px);
         box-shadow: 0 0 20px rgba(156, 201, 127, 0.3),
             0 0 40px rgba(156, 201, 127, 0.15),
@@ -710,10 +711,18 @@ body {
     }
 
     .nav-btn {
-        padding: 8px 12px;
-        font-size: 12px;
+        padding: 10px 14px;
+        font-size: 13px;
         white-space: nowrap;
-        outline-offset: -2px;
+        outline: none;
+        border-radius: 18px;
+        min-width: auto;
+        flex-shrink: 0;
+    }
+
+    .nav-btn:focus {
+        outline: 2px solid #9CC97F;
+        outline-offset: 1px;
     }
 
     .main-title {
