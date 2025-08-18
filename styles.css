@@ -694,10 +694,10 @@ body {
 
     .nav {
         top: 20px;
-        gap: 10px;
+        gap: 6px;
         padding: 4px;
-        width: calc(100% - 40px);
-        max-width: 400px;
+        width: auto;
+        max-width: calc(100vw - 40px);
         box-shadow: 0 0 20px rgba(156, 201, 127, 0.3),
             0 0 40px rgba(156, 201, 127, 0.15),
             0 4px 16px rgba(0, 0, 0, 0.3);
@@ -710,15 +710,14 @@ body {
     }
 
     .nav-btn {
-        padding: 10px 14px;
-        font-size: 13px;
-        flex: 1;
-        text-align: center;
-        min-width: 0;
+        padding: 8px 12px;
+        font-size: 12px;
+        white-space: nowrap;
+        outline-offset: -2px;
     }
 
     .main-title {
-        font-size: clamp(3.5rem, 16vw, 8rem);
+        font-size: clamp(4.5rem, 18vw, 9rem);
     }
 
     .transition-content {
@@ -772,10 +771,10 @@ body {
 @media (max-width: 480px) {
     .nav {
         top: 15px;
-        gap: 8px;
-        padding: 4px;
-        width: calc(100% - 30px);
-        max-width: 350px;
+        gap: 4px;
+        padding: 3px;
+        width: auto;
+        max-width: calc(100vw - 30px);
         transform: translateX(-50%) translateY(-70px);
     }
 
@@ -785,11 +784,10 @@ body {
     }
 
     .nav-btn {
-        padding: 8px 10px;
-        font-size: 12px;
-        flex: 1;
-        text-align: center;
-        min-width: 0;
+        padding: 6px 10px;
+        font-size: 11px;
+        white-space: nowrap;
+        outline-offset: -2px;
     }
 
     .main-title {
