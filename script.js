@@ -325,25 +325,104 @@ class ProjectsManager {
         this.projects = [
             {
                 id: 'sentinel',
-                title: 'Sentinel',
-                description: 'Real-time OSINT intelligence platform with autonomous content discovery, hybrid retrieval (vector + knowledge graph), and AI-powered brief generation from 40+ live sources.',
-                image: null, // Will show placeholder
-                tags: ['ai', 'python', 'osint', 'nlp', 'web'],
-                github: 'https://github.com/yourusername/sentinel',
+                title: 'sentinel',
+                description: 'osint system that auto-ingests 80+ news feeds and does vector search + entity extraction + knowledge graphs. hybrid bm25/semantic retrieval with raptor hierarchical summarization. exports markdown intelligence briefings with temporal weighting and graph-based relationships.',
+                image: null,
+                tags: ['python', 'fastapi', 'chromadb', 'sentence-transformers', 'spacy', 'networkx', 'scikit-learn', 'google-gemini', 'rss', 'web-scraping', 'vector-search', 'knowledge-graphs', 'nlp', 'machine-learning', 'ai', 'web'],
+                github: null,
                 devpost: null,
                 featured: true
             },
             {
                 id: 'fairusebot',
-                title: 'FairUseBot',
-                description: 'A RAG-powered chatbot that provides personalized copyright and fair use guidance with Creative Commons music search for different user roles.',
-                image: null,
-                tags: ['ai', 'rag', 'web', 'react', 'nlp'],
-                github: 'https://github.com/yourusername/fairusebot',
-                devpost: 'https://devpost.com/software/fairusebot',
+                title: 'fair use bot',
+                description: 'legal chatbot for copyright/fair use help across different user roles. searches creative commons audio via openverse api, auto-generates citations in mla/apa/chicago, gives personalized legal advice with integrated audio playback. winner at bruin ai hackathon 2025.',
+                image: 'images/fair-use-bot.png',
+                tags: ['python', 'fastapi', 'javascript', 'html', 'css', 'google-gemini', 'openverse-api', 'uvicorn', 'web', 'ai'],
+                github: null,
+                devpost: null,
                 featured: true
+            },
+            {
+                id: 'legalese',
+                title: 'legalese explainer',
+                description: 'turns legal pdfs into plain english using rag + gemini ai. detects document types, flags risks, extracts key terms. interactive q&a lets you ask about uploaded docs. exports analysis reports.',
+                image: 'images/legalese.png',
+                tags: ['javascript', 'node.js', 'express', 'html', 'css', 'google-gemini', 'rag', 'nlp', 'document-processing', 'rest-api', 'web', 'ai'],
+                github: null,
+                devpost: null,
+                featured: true
+            },
+            {
+                id: 'quantum-select',
+                title: 'quantum select',
+                description: 'quantum rag system using qaoa to optimize snippet selection for max relevance and min redundancy. combines bm25 + semantic embeddings with quantum optimization for diverse content from wikipedia. detects contradictions and visualizes quantum results.',
+                image: null,
+                tags: ['python', 'quantum-computing', 'qaoa', 'rag', 'classiq', 'bm25', 'sentence-transformers', 'cosine-similarity', 'qubo', 'wikipedia-api', 'gemini-api', 'nltk', 'numpy', 'matplotlib', 'ai'],
+                github: null,
+                devpost: null,
+                featured: false
+            },
+            {
+                id: 'fair-reads',
+                title: 'fair reads',
+                description: 'analyzes news articles for sentiment bias using logistic regression + tf-idf. shows you alternative perspectives from different political leanings on the same topic so you can escape echo chambers. third place at hack cupertino 2023.',
+                image: 'images/fairreads.png',
+                tags: ['python', 'flask', 'machine-learning', 'nlp', 'scikit-learn', 'nltk', 'sentiment-analysis', 'html', 'css', 'bootstrap', 'javascript', 'web-scraping', 'web', 'ai'],
+                github: null,
+                devpost: null,
+                featured: false
+            },
+            {
+                id: 'unhcr-map',
+                title: 'UNHCR refugee map',
+                description: 'interactive refugee data viz with dual leaflet maps showing host/origin countries color-coded by population density. year selection 2000-2024, demographic breakdowns with age/gender charts, sortable tables. built for unhcr via harvey mudd code for change.',
+                image: 'images/refugee-map-app.png',
+                tags: ['react', 'javascript', 'vite', 'leaflet', 'd3', 'express', 'node.js', 'rest-api', 'geojson', 'css', 'html', 'lodash', 'web'],
+                github: null,
+                devpost: null,
+                featured: false
+            },
+            {
+                id: 'shopstory',
+                title: 'shop story',
+                description: 'react based mini-app of hopify shopping analytics as instagram stories. gemini ai analyzes saved products for aesthetic insights, color palettes, carbon footprint, small business detection. scrapbook ui with animated galleries and social sharing. chosen to deploy on shopify shop app, over 10 million users.',
+                image: null,
+                tags: ['react', 'typescript', 'vite', 'tailwind-css', 'shopify', 'google-gemini', 'rest-api', 'mobile-first', 'pwa', 'css-animations', 'react-hooks', 'data-visualization', 'web', 'ai'],
+                github: null,
+                devpost: null,
+                featured: false
+            },
+            {
+                id: 'lingolift',
+                title: 'lingo lift',
+                description: 'ai language tutor with conversational practice at custom difficulty levels. real-time error analysis and feedback, auto-generates vocab quizzes based on your mistakes. personalized assessments for reinforcement. second place at treasure hacks.',
+                image: 'images/lingo-lift.jpg',
+                tags: ['python', 'flask', 'html', 'css', 'javascript', 'jquery', 'bootstrap', 'aos', 'ai', 'nlp', 'chatbot', 'web'],
+                github: null,
+                devpost: null,
+                featured: false
+            },
+            {
+                id: 'synapse',
+                title: 'synapse',
+                description: 'tracks knowledge through claude conversations and builds dynamic knowledge graphs. hybrid nlp concept detection, vector alignment via gemini embeddings, canvas lms integration for syllabi. interactive mermaid graphs with mastery tracking and learning gap analysis. made for hackmit 2025.',
+                image: 'images/synapse.png',
+                tags: ['node.js', 'express', 'sqlite', 'anthropic-claude', 'google-gemini', 'mermaid', 'knowledge-graphs', 'canvas-lms', 'nlp', 'rag', 'education-tech', 'claude-code-integration', 'web', 'ai'],
+                github: null,
+                devpost: null,
+                featured: false
+            },
+            {
+                id: 'skinskan',
+                title: 'skin skan',
+                description: 'medical ai that classifies skin lesions into 11 categories (8 lesion types + 3 burn severity levels). fine-tuned resnet18 with data augmentation and transfer learning via fastai. first place at sonoma hacks 3.0.',
+                image: 'images/skinskan.png',
+                tags: ['python', 'flask', 'fastai', 'machine-learning', 'computer-vision', 'pytorch', 'deep-learning', 'resnet18', 'transfer-learning', 'image-augmentation', 'html', 'css', 'bootstrap', 'medical-ai', 'image-classification', 'web', 'ai'],
+                github: null,
+                devpost: null,
+                featured: false
             }
-            // Add more projects here as needed
         ];
         
         this.currentFilter = 'all';
@@ -443,21 +522,76 @@ class ProjectsManager {
 
     filterProjects(filter) {
         this.currentFilter = filter;
-        const cards = document.querySelectorAll('.project-card');
-        
-        cards.forEach((card, index) => {
-            const cardTags = card.dataset.tags.split(' ');
-            const shouldShow = filter === 'all' || cardTags.includes(filter);
-            
-            // Add stagger delay for animation
-            setTimeout(() => {
-                if (shouldShow) {
-                    card.classList.remove('hidden');
-                } else {
-                    card.classList.add('hidden');
-                }
-            }, index * 50);
+        const grid = document.getElementById('projectsGrid');
+        if (!grid) return;
+
+        // Get all project cards
+        const cards = Array.from(document.querySelectorAll('.project-card'));
+
+        // FLIP: First - record current positions
+        const firstPositions = cards.map(card => ({
+            card,
+            rect: card.getBoundingClientRect()
+        }));
+
+        // Sort projects: matching ones first, then non-matching at bottom
+        const sortedCards = cards.sort((a, b) => {
+            const aMatches = filter === 'all' || a.dataset.tags.split(' ').includes(filter);
+            const bMatches = filter === 'all' || b.dataset.tags.split(' ').includes(filter);
+
+            if (aMatches && !bMatches) return -1;
+            if (!aMatches && bMatches) return 1;
+            return 0;
         });
+
+        // Reorder DOM and update visibility
+        sortedCards.forEach((card) => {
+            grid.appendChild(card);
+
+            const cardMatches = filter === 'all' || card.dataset.tags.split(' ').includes(filter);
+            if (cardMatches) {
+                card.classList.remove('hidden');
+            } else {
+                card.classList.add('hidden');
+            }
+        });
+
+        // FLIP: Last - get new positions
+        const lastPositions = cards.map(card => ({
+            card,
+            rect: card.getBoundingClientRect()
+        }));
+
+        // FLIP: Invert - calculate differences and animate
+        firstPositions.forEach((first, index) => {
+            const last = lastPositions.find(l => l.card === first.card);
+            if (!last) return;
+
+            const deltaX = first.rect.left - last.rect.left;
+            const deltaY = first.rect.top - last.rect.top;
+
+            // Skip animation if no movement
+            if (deltaX === 0 && deltaY === 0) return;
+
+            // Invert: apply transform to put card back at original position
+            first.card.style.transform = `translate(${deltaX}px, ${deltaY}px)`;
+            first.card.style.transition = 'none';
+
+            // Force reflow
+            first.card.offsetHeight;
+
+            // Play: animate to new position
+            first.card.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            first.card.style.transform = 'translate(0, 0)';
+        });
+
+        // Clean up transition styles after animation
+        setTimeout(() => {
+            cards.forEach(card => {
+                card.style.transition = '';
+                card.style.transform = '';
+            });
+        }, 500);
     }
 
     addProject(project) {
