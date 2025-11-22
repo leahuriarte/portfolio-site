@@ -85,6 +85,16 @@ body {
     overflow: hidden;
 }
 
+.watercolor-canvas {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 0;
+    cursor: crosshair;
+}
+
 .home-content {
     position: absolute;
     bottom: 8vh;
@@ -93,6 +103,7 @@ body {
     z-index: 1;
     padding-left: 4vw;
     padding-top: 0vh;
+    pointer-events: none;
 }
 
 .tiger-container {
@@ -102,12 +113,14 @@ body {
     z-index: 2;
     width: 45vw;
     max-width: 700px;
+    pointer-events: none;
 }
 
 .tiger-image {
     width: 100%;
     height: auto;
     display: block;
+    pointer-events: none;
 }
 
 .main-title {

@@ -1,3 +1,140 @@
+// Watercolor Paint Effect
+class WatercolorPaint {
+    constructor() {
+        this.canvas = document.getElementById('watercolorCanvas');
+        if (!this.canvas) return;
+
+        this.ctx = this.canvas.getContext('2d');
+        this.isDrawing = false;
+        this.lastX = 0;
+        this.lastY = 0;
+        this.watercolorColor = '#9CC97F'; // lighter green color
+
+        this.init();
+    }
+
+    init() {
+        // Set canvas size to match window
+        this.resizeCanvas();
+        window.addEventListener('resize', () => this.resizeCanvas());
+
+        // Mouse events
+        this.canvas.addEventListener('mousedown', (e) => this.startDrawing(e));
+        this.canvas.addEventListener('mousemove', (e) => this.draw(e));
+        this.canvas.addEventListener('mouseup', () => this.stopDrawing());
+        this.canvas.addEventListener('mouseout', () => this.stopDrawing());
+
+        // Click event for tiger meow
+        this.canvas.addEventListener('click', (e) => this.handleClick(e));
+
+        // Touch events for mobile
+        this.canvas.addEventListener('touchstart', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            this.startDrawing(touch);
+        });
+        this.canvas.addEventListener('touchmove', (e) => {
+            e.preventDefault();
+            const touch = e.touches[0];
+            this.draw(touch);
+        });
+        this.canvas.addEventListener('touchend', () => this.stopDrawing());
+    }
+
+    resizeCanvas() {
+        this.canvas.width = this.canvas.offsetWidth;
+        this.canvas.height = this.canvas.offsetHeight;
+    }
+
+    startDrawing(e) {
+        this.isDrawing = true;
+        const rect = this.canvas.getBoundingClientRect();
+        this.lastX = (e.clientX || e.pageX) - rect.left;
+        this.lastY = (e.clientY || e.pageY) - rect.top;
+    }
+
+    stopDrawing() {
+        this.isDrawing = false;
+    }
+
+    draw(e) {
+        if (!this.isDrawing) return;
+
+        const rect = this.canvas.getBoundingClientRect();
+        const currentX = (e.clientX || e.pageX) - rect.left;
+        const currentY = (e.clientY || e.pageY) - rect.top;
+
+        // Create watercolor effect with multiple layers
+        const layers = 5; // Number of overlapping circles for watercolor effect
+
+        for (let i = 0; i < layers; i++) {
+            // Random offset for organic watercolor look
+            const offsetX = (Math.random() - 0.5) * 20;
+            const offsetY = (Math.random() - 0.5) * 20;
+
+            // Varying size and opacity for depth
+            const size = 30 + Math.random() * 20;
+            const opacity = 0.05 + Math.random() * 0.1;
+
+            // Create gradient for each blob
+            const gradient = this.ctx.createRadialGradient(
+                currentX + offsetX, currentY + offsetY, 0,
+                currentX + offsetX, currentY + offsetY, size
+            );
+
+            // Parse the hex color and add alpha
+            const r = parseInt(this.watercolorColor.slice(1, 3), 16);
+            const g = parseInt(this.watercolorColor.slice(3, 5), 16);
+            const b = parseInt(this.watercolorColor.slice(5, 7), 16);
+
+            gradient.addColorStop(0, `rgba(${r}, ${g}, ${b}, ${opacity})`);
+            gradient.addColorStop(0.5, `rgba(${r}, ${g}, ${b}, ${opacity * 0.5})`);
+            gradient.addColorStop(1, `rgba(${r}, ${g}, ${b}, 0)`);
+
+            this.ctx.fillStyle = gradient;
+            this.ctx.fillRect(
+                currentX + offsetX - size,
+                currentY + offsetY - size,
+                size * 2,
+                size * 2
+            );
+        }
+
+        // Draw connecting stroke for smooth lines
+        this.ctx.strokeStyle = `rgba(156, 201, 127, 0.1)`;
+        this.ctx.lineWidth = 30;
+        this.ctx.lineCap = 'round';
+        this.ctx.lineJoin = 'round';
+
+        this.ctx.beginPath();
+        this.ctx.moveTo(this.lastX, this.lastY);
+        this.ctx.lineTo(currentX, currentY);
+        this.ctx.stroke();
+
+        this.lastX = currentX;
+        this.lastY = currentY;
+    }
+
+    handleClick(e) {
+        // Check if click is on tiger image and play meow sound
+        const tigerImage = document.querySelector('.tiger-image');
+        if (!tigerImage) return;
+
+        const rect = tigerImage.getBoundingClientRect();
+        const clickX = e.clientX;
+        const clickY = e.clientY;
+
+        // Check if click is within tiger bounds
+        if (clickX >= rect.left && clickX <= rect.right &&
+            clickY >= rect.top && clickY <= rect.bottom) {
+            const meowSound = new Audio('images/meow.mp3');
+            meowSound.play().catch(error => {
+                console.log('Meow failed:', error);
+            });
+        }
+    }
+}
+
 // Mouse following effect for main title
 class MouseFollowTitle {
     constructor() {
@@ -609,6 +746,7 @@ class ProjectsManager {
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
+    new WatercolorPaint();
     // new MouseFollowTitle(); // Disabled for new layout
     new ScrollEffects();
     new Navigation();
@@ -616,18 +754,6 @@ document.addEventListener('DOMContentLoaded', () => {
     new ButtonEffects();
     new PerformanceManager();
     new ProjectsManager();
-
-    // Tiger meow on click
-    const tigerImage = document.querySelector('.tiger-image');
-    if (tigerImage) {
-        tigerImage.style.cursor = 'pointer';
-        tigerImage.addEventListener('click', () => {
-            const meowSound = new Audio('images/meow.mp3');
-            meowSound.play().catch(error => {
-                console.log('Meow failed:', error);
-            });
-        });
-    }
 
     // Handle initial URL
     const currentHash = window.location.hash.substring(1);
