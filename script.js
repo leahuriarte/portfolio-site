@@ -131,22 +131,27 @@ class ScrollEffects {
         const backgroundImage = document.querySelector('.background-image');
         const backgroundOverlay = document.querySelector('.background-overlay');
         const homeContent = document.querySelector('.home-content');
-        
-        // Smoother parallax effect on background
-        backgroundImage.style.transform = `translateY(${progress * 20}%) scale(${1 + progress * 0.1})`;
-        
-        // More gradual overlay fade
-        const overlayOpacity = 0.3 + (progress * 0.4);
-        backgroundOverlay.style.background = `linear-gradient(180deg, 
-            rgba(15, 66, 63, ${overlayOpacity * 0.3}) 0%, 
-            rgba(15, 66, 63, ${overlayOpacity * 0.5}) 50%, 
-            rgba(15, 66, 63, ${overlayOpacity}) 100%)`;
-        
+
+        // Only update if old background elements exist
+        if (backgroundImage) {
+            backgroundImage.style.transform = `translateY(${progress * 20}%) scale(${1 + progress * 0.1})`;
+        }
+
+        if (backgroundOverlay) {
+            const overlayOpacity = 0.3 + (progress * 0.4);
+            backgroundOverlay.style.background = `linear-gradient(180deg,
+                rgba(15, 66, 63, ${overlayOpacity * 0.3}) 0%,
+                rgba(15, 66, 63, ${overlayOpacity * 0.5}) 50%,
+                rgba(15, 66, 63, ${overlayOpacity}) 100%)`;
+        }
+
         // Smoother fade out of home content
-        const contentOpacity = Math.max(0, 1 - (progress * 1.5));
-        homeContent.style.opacity = contentOpacity;
-        homeContent.style.transform = `translateY(${progress * -30}px)`;
-        
+        if (homeContent) {
+            const contentOpacity = Math.max(0, 1 - (progress * 1.5));
+            homeContent.style.opacity = contentOpacity;
+            homeContent.style.transform = `translateY(${progress * -30}px)`;
+        }
+
         // Add scrolled class for additional effects
         if (progress > 0.05) {
             this.homeSection.classList.add('scrolled');
@@ -446,7 +451,7 @@ class ProjectsManager {
         });
 
         grid.innerHTML = sortedProjects.map(project => this.createProjectCard(project)).join('');
-        
+
         // Add click handlers for project tags
         this.setupProjectTagHandlers();
     }
@@ -604,13 +609,25 @@ class ProjectsManager {
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
-    new MouseFollowTitle();
+    // new MouseFollowTitle(); // Disabled for new layout
     new ScrollEffects();
     new Navigation();
     new SmoothScroll();
     new ButtonEffects();
     new PerformanceManager();
     new ProjectsManager();
+
+    // Tiger meow on click
+    const tigerImage = document.querySelector('.tiger-image');
+    if (tigerImage) {
+        tigerImage.style.cursor = 'pointer';
+        tigerImage.addEventListener('click', () => {
+            const meowSound = new Audio('images/meow.mp3');
+            meowSound.play().catch(error => {
+                console.log('Meow failed:', error);
+            });
+        });
+    }
 
     // Handle initial URL
     const currentHash = window.location.hash.substring(1);
