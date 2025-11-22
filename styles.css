@@ -113,7 +113,7 @@ body {
 .main-title {
     font-family: 'Crimson Pro', serif;
     font-size: clamp(8rem, 25vw, 28rem);
-    font-weight: 300;
+    font-weight: lighter;
     line-height: 0.85;
     cursor: default;
     letter-spacing: -0.03em;
