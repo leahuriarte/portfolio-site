@@ -383,7 +383,7 @@ body {
 .projects-title {
     font-family: 'Crimson Pro', serif;
     font-size: clamp(3rem, 8vw, 5rem);
-    font-weight: 600;
+    font-weight: 400;
     color: var(--dark-text);
     margin-bottom: 50px;
     text-align: center;
@@ -620,6 +620,7 @@ body {
     font-size: 3rem;
     color: var(--dark-text);
     margin-bottom: 20px;
+    font-weight: 400;
 }
 
 .section-content p {
