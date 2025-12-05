@@ -8,7 +8,7 @@ class WatercolorPaint {
         this.isDrawing = false;
         this.lastX = 0;
         this.lastY = 0;
-        this.watercolorColor = '#9CC97F'; // lighter green color
+        this.watercolorColor = '#77477E'; 
 
         this.init();
     }
@@ -65,7 +65,7 @@ class WatercolorPaint {
         const currentY = (e.clientY || e.pageY) - rect.top;
 
         // Create watercolor effect with multiple layers
-        const layers = 5; // Number of overlapping circles for watercolor effect
+        const layers = 10; // Number of overlapping circles for watercolor effect
 
         for (let i = 0; i < layers; i++) {
             // Random offset for organic watercolor look
@@ -101,7 +101,7 @@ class WatercolorPaint {
         }
 
         // Draw connecting stroke for smooth lines
-        this.ctx.strokeStyle = `rgba(156, 201, 127, 0.1)`;
+        this.ctx.strokeStyle = `rgb(119,71,126,0.05)`;
         this.ctx.lineWidth = 30;
         this.ctx.lineCap = 'round';
         this.ctx.lineJoin = 'round';

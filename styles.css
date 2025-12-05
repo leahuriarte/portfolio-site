@@ -6,8 +6,13 @@
 }
 
 :root {
-    --beige: #ecebe0;
-    --dark-text: #1c1d1c;
+    --white: #ffffff;
+    --black: #000000;
+    --raspberry: #E22C48;
+    --tangerine: #ffaf0f;
+    --grape: #77477E;
+    --blueberry: #024979;
+    --dark-text: #272827;
     --green-primary: #0F423F;
     --green-accent: #9CC97F;
 }
@@ -18,8 +23,8 @@ html {
 
 body {
     font-family: 'Geist', sans-serif;
-    background: var(--beige);
-    color: var(--dark-text);
+    background: var(--white);
+    color: var(--black);
     overflow-x: hidden;
     line-height: 1.7;
 }
@@ -33,12 +38,11 @@ body {
     display: flex;
     gap: 20px;
     z-index: 1000;
-    background: rgba(244, 239, 230, 0.95);
-    backdrop-filter: blur(10px);
+    background: var(--black);
+    backdrop-filter: blur(0px);
     padding: 6px;
     border-radius: 30px;
-    border: 1px solid rgba(46, 44, 40, 0.1);
-    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    border: 1px solid var(--black);
     transition: transform 0.3s ease;
     opacity: 0;
 }
@@ -58,7 +62,7 @@ body {
     background: transparent;
     border: 2px solid transparent;
     border-radius: 22px;
-    color: var(--dark-text);
+    color: var(--white);
     font-family: 'Geist', sans-serif;
     font-weight: 400;
     font-size: 14px;
@@ -67,21 +71,21 @@ body {
 }
 
 .nav-btn:hover {
-    border-color: var(--green-primary);
-    background: rgba(15, 66, 63, 0.05);
+    border-color: var(--grape);
+    background: var(--black);
 }
 
 .nav-btn.active {
-    background: var(--green-primary);
-    color: var(--beige);
-    border-color: var(--green-primary);
+    background: var(--grape);
+    color: var(--white);
+    border-color: var(--grape);
 }
 
 /* Home Section */
 .home-section {
     height: 100vh;
     position: relative;
-    background: var(--beige);
+    background: var(--white);
     overflow: hidden;
 }
 
@@ -130,7 +134,7 @@ body {
     line-height: 0.85;
     cursor: default;
     letter-spacing: -0.03em;
-    color: var(--green-primary);
+    color: var(--black);
     display: flex;
     flex-direction: column;
     align-items: flex-start;
@@ -198,7 +202,7 @@ body {
 /* Transition Section */
 .transition-section {
     min-height: 100vh;
-    background: var(--beige);
+    background: var(--white);
     position: relative;
 }
 
@@ -262,7 +266,7 @@ body {
 .status-item h2:hover+.action-btn {
     animation: buttonBounce 0.6s ease-in-out infinite;
     background: var(--green-primary);
-    color: var(--beige);
+    color: var(--white);
     box-shadow: 0 8px 25px rgba(15, 66, 63, 0.2);
 }
 
@@ -283,7 +287,7 @@ body {
 
 .action-btn:hover {
     background: var(--green-primary);
-    color: var(--beige);
+    color: var(--white);
     transform: translateY(-3px);
     box-shadow: 0 8px 25px rgba(15, 66, 63, 0.2);
 }
@@ -291,7 +295,7 @@ body {
 /* About Section */
 .about-section {
     min-height: 100vh;
-    background: var(--beige);
+    background: var(--white);
     padding: 100px 50px;
     display: none;
 }
@@ -366,7 +370,7 @@ body {
 /* Projects Section */
 .projects-section {
     min-height: 100vh;
-    background: var(--beige);
+    background: var(--white);
     display: none;
     padding: 100px 50px;
 }
@@ -424,7 +428,7 @@ body {
 .filter-tag.active {
     background: var(--green-primary);
     border-color: var(--green-primary);
-    color: var(--beige);
+    color: var(--white);
     opacity: 1;
 }
 
@@ -472,7 +476,7 @@ body {
     top: 15px;
     left: 15px;
     background: var(--green-primary);
-    color: var(--beige);
+    color: var(--white);
     padding: 4px 12px;
     border-radius: 12px;
     font-size: 11px;
@@ -560,7 +564,7 @@ body {
 .project-link:hover {
     background: var(--green-primary);
     border-color: var(--green-primary);
-    color: var(--beige);
+    color: var(--white);
     transform: translateY(-2px);
 }
 
@@ -591,7 +595,7 @@ body {
 
 .project-tag:hover {
     background: var(--green-primary);
-    color: var(--beige);
+    color: var(--white);
     border-color: var(--green-primary);
     cursor: pointer;
 }
@@ -599,7 +603,7 @@ body {
 /* Resume Section */
 .resume-section {
     min-height: 100vh;
-    background: var(--beige);
+    background: var(--white);
     display: none;
     align-items: center;
     justify-content: center;
