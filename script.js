@@ -8,7 +8,7 @@ class WatercolorPaint {
         this.isDrawing = false;
         this.lastX = 0;
         this.lastY = 0;
-        this.watercolorColor = '#77477E'; 
+        this.watercolorColor = '#6b5cff'; 
 
         this.init();
     }
@@ -74,7 +74,7 @@ class WatercolorPaint {
 
             // Varying size and opacity for depth
             const size = 30 + Math.random() * 20;
-            const opacity = 0.05 + Math.random() * 0.1;
+            const opacity = 0.05 + Math.random() * 0.05;
 
             // Create gradient for each blob
             const gradient = this.ctx.createRadialGradient(
@@ -101,7 +101,7 @@ class WatercolorPaint {
         }
 
         // Draw connecting stroke for smooth lines
-        this.ctx.strokeStyle = `rgb(119,71,126,0.05)`;
+        this.ctx.strokeStyle = `rgb(119,71,126,0.025)`;
         this.ctx.lineWidth = 30;
         this.ctx.lineCap = 'round';
         this.ctx.lineJoin = 'round';
@@ -187,7 +187,8 @@ class ScrollEffects {
         this.nav = document.querySelector('.nav');
         this.lastScrollY = 0;
         this.isHomeSection = true;
-        
+        this.scrollingDown = false;
+
         this.init();
     }
 
@@ -195,7 +196,7 @@ class ScrollEffects {
         window.addEventListener('scroll', () => this.handleScroll(), { passive: true });
         window.addEventListener('resize', () => this.handleResize());
         window.addEventListener('mousemove', (e) => this.handleMouseMove(e));
-        
+
         // Initial check
         this.handleScroll();
         this.updateNavVisibility();
@@ -204,63 +205,52 @@ class ScrollEffects {
     handleScroll() {
         const scrollY = window.scrollY;
         const windowHeight = window.innerHeight;
-        
+
+        // Detect scroll direction
+        this.scrollingDown = scrollY > this.lastScrollY;
+
         // Home section background parallax - extended range for smoother transition
         if (scrollY < windowHeight * 1.2) {
             const progress = scrollY / (windowHeight * 1.2);
             this.updateHomeSection(progress);
         }
-        
+
         // Transition section content reveal
         const transitionTop = this.transitionSection.offsetTop;
         const transitionProgress = Math.max(0, Math.min(1, (scrollY - transitionTop + windowHeight * 0.8) / windowHeight));
-        
+
         if (transitionProgress > 0.2 && !this.contentReveal.classList.contains('visible')) {
             this.contentReveal.classList.add('visible');
         }
-        
+
         // Update navbar visibility
         this.updateNavVisibility();
-        
+
         this.lastScrollY = scrollY;
     }
 
     handleMouseMove(e) {
-        // Only handle mouse hover in home experience, not in other sections
-        if (this.isHomeSection) {
-            // Show navbar when mouse is near the top of the screen
-            if (e.clientY < 100) {
-                this.nav.classList.add('visible');
-            } else if (e.clientY > 150) {
-                // Only hide if we're not at the very top of the page
-                if (window.scrollY > 50) {
-                    this.nav.classList.remove('visible');
-                }
-            }
+        // Show navbar when mouse is near the top of the screen
+        if (e.clientY < 100) {
+            this.nav.classList.add('visible');
         }
     }
 
     updateNavVisibility() {
         const scrollY = window.scrollY;
-        const windowHeight = window.innerHeight;
-        
-        // Check if we're still in the home experience (home + transition sections)
-        // Only show navbar always when we reach other sections (about, projects, resume)
-        const transitionEnd = this.transitionSection.offsetTop + this.transitionSection.offsetHeight;
-        this.isHomeSection = scrollY < transitionEnd - windowHeight * 0.2;
-        
-        if (this.isHomeSection) {
-            // In home experience: show only at very top or on mouse hover
-            if (scrollY < 50) {
-                this.nav.classList.add('visible');
-            } else {
-                this.nav.classList.remove('visible');
-            }
-            this.nav.classList.remove('always-visible');
-        } else {
-            // Outside home experience: always show
-            this.nav.classList.add('always-visible');
+
+        // Always hide when scrolling down (except at very top)
+        if (this.scrollingDown && scrollY > 100) {
             this.nav.classList.remove('visible');
+            this.nav.classList.remove('always-visible');
+        }
+        // Show when scrolling up
+        else if (!this.scrollingDown && scrollY > 100) {
+            this.nav.classList.add('visible');
+        }
+        // Always show at very top of page
+        else if (scrollY < 100) {
+            this.nav.classList.add('visible');
         }
     }
 
@@ -344,8 +334,6 @@ class Navigation {
     }
 
     showSection(sectionName, pushState = true) {
-        if (this.currentSection === sectionName) return;
-        
         // Hide all sections
         Object.values(this.sections).flat().forEach(section => {
             if (section) {
@@ -469,9 +457,9 @@ class ProjectsManager {
                 id: 'sentinel',
                 title: 'sentinel',
                 description: 'osint system that auto-ingests 80+ news feeds and does vector search + entity extraction + knowledge graphs. hybrid bm25/semantic retrieval with raptor hierarchical summarization. exports markdown intelligence briefings with temporal weighting and graph-based relationships.',
-                image: 'images/sentinel.svg',
-                tags: ['python', 'fastapi', 'chromadb', 'sentence-transformers', 'spacy', 'networkx', 'scikit-learn', 'google-gemini', 'rss', 'web-scraping', 'vector-search', 'knowledge-graphs', 'nlp', 'machine-learning', 'ai', 'web'],
-                github: null,
+                image: 'images/sentinel.png',
+                tags: ['python', 'fastapi', 'chromadb', 'spacy', 'networkx', 'scikit',  'web scraping', 'vector search', 'knowledge graphs', 'nlp', 'machine learning', 'ai', 'web'],
+                github: 'https://github.com/leahuriarte/sentinel',
                 devpost: null,
                 featured: true
             },
@@ -479,19 +467,19 @@ class ProjectsManager {
                 id: 'fairusebot',
                 title: 'fair use bot',
                 description: 'legal chatbot for copyright/fair use help across different user roles. searches creative commons audio via openverse api, auto-generates citations in mla/apa/chicago, gives personalized legal advice with integrated audio playback. winner at bruin ai hackathon 2025.',
-                image: 'images/fairusebot.svg',
-                tags: ['python', 'fastapi', 'javascript', 'html', 'css', 'google-gemini', 'openverse-api', 'uvicorn', 'web', 'ai'],
-                github: null,
-                devpost: null,
+                image: 'images/fair use bot.png',
+                tags: ['python', 'fastapi', 'javascript', 'uvicorn', 'web', 'ai'],
+                github: 'https://github.com/leahuriarte/fairusebot',
+                devpost: 'https://devpost.com/software/fairusebot',
                 featured: true
             },
             {
                 id: 'legalese',
                 title: 'legalese explainer',
                 description: 'turns legal pdfs into plain english using rag + gemini ai. detects document types, flags risks, extracts key terms. interactive q&a lets you ask about uploaded docs. exports analysis reports.',
-                image: 'images/legaleseexplainer.svg',
-                tags: ['javascript', 'node.js', 'express', 'html', 'css', 'google-gemini', 'rag', 'nlp', 'document-processing', 'rest-api', 'web', 'ai'],
-                github: null,
+                image: 'images/legalese-explainer.png',
+                tags: ['javascript', 'node.js', 'express', 'rag', 'nlp', 'web', 'ai'],
+                github: 'https://github.com/leahuriarte/legalese-explainer',
                 devpost: null,
                 featured: true
             },
@@ -499,9 +487,9 @@ class ProjectsManager {
                 id: 'quantum-select',
                 title: 'quantum select',
                 description: 'quantum rag system using qaoa to optimize snippet selection for max relevance and min redundancy. combines bm25 + semantic embeddings with quantum optimization for diverse content from wikipedia. detects contradictions and visualizes quantum results.',
-                image: 'images/quantumselect.svg',
-                tags: ['python', 'quantum-computing', 'qaoa', 'rag', 'classiq', 'bm25', 'sentence-transformers', 'cosine-similarity', 'qubo', 'wikipedia-api', 'gemini-api', 'nltk', 'numpy', 'matplotlib', 'ai'],
-                github: null,
+                image: 'images/quantum select.png',
+                tags: ['python', 'quantum computing', 'qaoa', 'rag', 'classiq', 'bm25', 'qubo', 'nltk', 'numpy', 'matplotlib', 'ai'],
+                github: 'https://github.com/leahuriarte/quantum-select',
                 devpost: null,
                 featured: false
             },
@@ -509,29 +497,29 @@ class ProjectsManager {
                 id: 'fair-reads',
                 title: 'fair reads',
                 description: 'analyzes news articles for sentiment bias using logistic regression + tf-idf. shows you alternative perspectives from different political leanings on the same topic so you can escape echo chambers. third place at hack cupertino 2023.',
-                image: 'images/fairreads.svg',
-                tags: ['python', 'flask', 'machine-learning', 'nlp', 'scikit-learn', 'nltk', 'sentiment-analysis', 'html', 'css', 'bootstrap', 'javascript', 'web-scraping', 'web', 'ai'],
-                github: null,
-                devpost: null,
+                image: 'images/fair reads.png',
+                tags: ['python', 'flask', 'machine learning', 'nlp', 'scikit', 'nltk', 'sentiment analysis', 'javascript', 'web scraping', 'web', 'ai'],
+                github: 'https://github.com/leahuriarte/fairreads',
+                devpost: 'https://devpost.com/software/fair-reads',
                 featured: false
             },
             {
                 id: 'unhcr-map',
                 title: 'UNHCR refugee map',
                 description: 'interactive refugee data viz with dual leaflet maps showing host/origin countries color-coded by population density. year selection 2000-2024, demographic breakdowns with age/gender charts, sortable tables. built for unhcr via harvey mudd code for change.',
-                image: 'images/refugee-map-app.svg',
-                tags: ['react', 'javascript', 'vite', 'leaflet', 'd3', 'express', 'node.js', 'rest-api', 'geojson', 'css', 'html', 'lodash', 'web'],
-                github: null,
+                image: 'images/refugee-map.png',
+                tags: ['react', 'javascript', 'vite', 'leaflet', 'd3', 'express', 'node.js', 'geojson', 'web'],
+                github: 'https://github.com/leahuriarte/refugee-map-app',
                 devpost: null,
                 featured: false
             },
             {
                 id: 'shopstory',
                 title: 'shop story',
-                description: 'react based mini-app of hopify shopping analytics as instagram stories. gemini ai analyzes saved products for aesthetic insights, color palettes, carbon footprint, small business detection. scrapbook ui with animated galleries and social sharing. chosen to deploy on shopify shop app, over 10 million users.',
-                image: 'images/shopstory.svg',
-                tags: ['react', 'typescript', 'vite', 'tailwind-css', 'shopify', 'google-gemini', 'rest-api', 'mobile-first', 'pwa', 'css-animations', 'react-hooks', 'data-visualization', 'web', 'ai'],
-                github: null,
+                description: 'react based mini-app of shopify shopping analytics as instagram stories. gemini ai analyzes saved products for aesthetic insights, color palettes, carbon footprint, small business detection. scrapbook ui with animated galleries and social sharing. chosen to deploy on shopify shop app, over 10 million users.',
+                image: 'images/shop story.png',
+                tags: ['react', 'typescript', 'vite', 'tailwind',  'mobile first',  'data visualization', 'ai'],
+                github: 'https://github.com/leahuriarte/shopstory',
                 devpost: null,
                 featured: false
             },
@@ -539,19 +527,19 @@ class ProjectsManager {
                 id: 'lingolift',
                 title: 'lingo lift',
                 description: 'ai language tutor with conversational practice at custom difficulty levels. real-time error analysis and feedback, auto-generates vocab quizzes based on your mistakes. personalized assessments for reinforcement. second place at treasure hacks.',
-                image: 'images/lingolift.svg',
-                tags: ['python', 'flask', 'html', 'css', 'javascript', 'jquery', 'bootstrap', 'aos', 'ai', 'nlp', 'chatbot', 'web'],
-                github: null,
-                devpost: null,
+                image: 'images/lingo lift.png',
+                tags: ['python', 'flask', 'javascript', 'jquery', 'ai', 'nlp', 'chatbot', 'web'],
+                github: 'https://github.com/leahuriarte/lingolift',
+                devpost: 'https://devpost.com/software/lingolift',
                 featured: false
             },
             {
                 id: 'synapse',
                 title: 'synapse',
                 description: 'tracks knowledge through claude conversations and builds dynamic knowledge graphs. hybrid nlp concept detection, vector alignment via gemini embeddings, canvas lms integration for syllabi. interactive mermaid graphs with mastery tracking and learning gap analysis. made for hackmit 2025.',
-                image: 'images/synapse.svg',
-                tags: ['node.js', 'express', 'sqlite', 'anthropic-claude', 'google-gemini', 'mermaid', 'knowledge-graphs', 'canvas-lms', 'nlp', 'rag', 'education-tech', 'claude-code-integration', 'web', 'ai'],
-                github: null,
+                image: 'images/synapse.png',
+                tags: ['node.js', 'express', 'sqlite', 'mermaid', 'knowledge-graphs',  'nlp', 'rag', 'web', 'ai'],
+                github: 'https://github.com/leahuriarte/synapse',
                 devpost: null,
                 featured: false
             },
@@ -559,10 +547,10 @@ class ProjectsManager {
                 id: 'skinskan',
                 title: 'skin skan',
                 description: 'medical ai that classifies skin lesions into 11 categories (8 lesion types + 3 burn severity levels). fine-tuned resnet18 with data augmentation and transfer learning via fastai. first place at sonoma hacks 3.0.',
-                image: 'images/skinskan.svg',
-                tags: ['python', 'flask', 'fastai', 'machine-learning', 'computer-vision', 'pytorch', 'deep-learning', 'resnet18', 'transfer-learning', 'image-augmentation', 'html', 'css', 'bootstrap', 'medical-ai', 'image-classification', 'web', 'ai'],
-                github: null,
-                devpost: null,
+                image: 'images/skin-skan.png',
+                tags: ['python', 'flask', 'fastai', 'machine learning', 'computer vision', 'pytorch', 'deep learning', 'resnet18', 'transfer learning', 'classification', 'web', 'ai'],
+                github: 'https://github.com/leahuriarte/skinskan',
+                devpost: 'https://devpost.com/software/skin-skan',
                 featured: false
             }
         ];
@@ -594,8 +582,8 @@ class ProjectsManager {
     }
 
     createProjectCard(project) {
-        const githubIcon = project.github ? `<a href="${project.github}" target="_blank" rel="noopener" class="project-link" title="GitHub">⚡</a>` : '';
-        const devpostIcon = project.devpost ? `<a href="${project.devpost}" target="_blank" rel="noopener" class="project-link" title="Devpost">🏆</a>` : '';
+        const githubIcon = project.github ? `<a href="${project.github}" target="_blank" rel="noopener" class="project-link" title="GitHub">github</a>` : '';
+        const devpostIcon = project.devpost ? `<a href="${project.devpost}" target="_blank" rel="noopener" class="project-link" title="Devpost">devpost</a>` : '';
         
         const imageContent = project.image 
             ? `<img src="${project.image}" alt="${project.title}">`
