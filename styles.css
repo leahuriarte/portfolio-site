@@ -681,7 +681,7 @@ body {
 
 @media (max-width: 600px) {
     .projects-section {
-        padding: 80px 30px;
+        padding: 100px 20px;
     }
 
     .projects-title {
@@ -736,11 +736,15 @@ body {
         gap: 25px;
     }
 
+    .about-section {
+        padding: 100px 20px;
+    }
+
     .about-container {
         flex-direction: column;
         text-align: center;
         gap: 40px;
-        padding: 50px 20px;
+        padding: 0;
     }
 
     .about-title {
@@ -764,7 +768,7 @@ body {
     }
 
     .resume-section {
-        padding: 80px 20px;
+        padding: 100px 20px;
     }
 
     .resume-viewer {
@@ -809,8 +813,12 @@ body {
         font-size: clamp(2rem, 10vw, 3rem);
     }
 
+    .about-section {
+        padding: 80px 20px;
+    }
+
     .about-container {
-        padding: 30px 15px;
+        padding: 0;
     }
 
     .pixel-avatar {
@@ -819,7 +827,11 @@ body {
     }
 
     .projects-section {
-        padding: 60px 20px;
+        padding: 80px 20px;
+    }
+
+    .resume-section {
+        padding: 80px 20px;
     }
 
     .filter-container {
