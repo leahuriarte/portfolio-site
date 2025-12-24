@@ -8,7 +8,7 @@ class WatercolorPaint {
         this.isDrawing = false;
         this.lastX = 0;
         this.lastY = 0;
-        this.watercolorColor = '#6b5cff'; 
+        this.watercolorColor = '#0000ff'; 
 
         this.init();
     }
@@ -101,7 +101,7 @@ class WatercolorPaint {
         }
 
         // Draw connecting stroke for smooth lines
-        this.ctx.strokeStyle = `rgb(119,71,126,0.025)`;
+        this.ctx.strokeStyle = `rgb(0,0,255,0.02)`;
         this.ctx.lineWidth = 30;
         this.ctx.lineCap = 'round';
         this.ctx.lineJoin = 'round';
