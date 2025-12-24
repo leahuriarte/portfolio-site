@@ -760,6 +760,17 @@ window.addEventListener('load', () => {
     console.log('Website fully loaded');
 });
 
+// Scroll button functionality
+const scrollButton = document.querySelector('.scroll-button');
+if (scrollButton) {
+    scrollButton.addEventListener('click', () => {
+        const transitionSection = document.getElementById('transition');
+        if (transitionSection) {
+            transitionSection.scrollIntoView({ behavior: 'smooth' });
+        }
+    });
+}
+
 // Error handling
 window.addEventListener('error', (e) => {
     console.warn('Script error:', e.error);

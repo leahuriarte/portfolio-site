@@ -134,8 +134,7 @@ body {
     filter: drop-shadow(0 0 15px rgba(255, 255, 255, 1))
             drop-shadow(0 0 30px rgba(255, 255, 255, 1))
             drop-shadow(0 0 50px rgba(255, 255, 255, 1))
-            drop-shadow(0 0 70px rgba(255, 255, 255, 1))
-            drop-shadow(0 0 100px rgba(255, 255, 255, 1));
+
 }
 
 .main-title {
@@ -160,19 +159,38 @@ body {
     padding-left: 0.6em;
 }
 
-.scroll-indicator {
+.scroll-button {
+    display: none;
     position: absolute;
-    bottom: 3vh;
+    bottom: 5vh;
     left: 50%;
     transform: translateX(-50%);
-    opacity: 0.5;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--blue-primary);
+    border: none;
+    z-index: 10;
     animation: bounce 2s infinite;
-    z-index: 3;
+    box-shadow: 0 4px 20px rgba(30, 0, 255, 0.3);
+    transition: all 0.3s ease;
+    align-items: center;
+    justify-content: center;
 }
 
-.scroll-arrow {
-    font-size: 2rem;
-    color: var(--green-primary);
+.scroll-button:hover {
+    background: var(--blue-dark);
+    transform: translateX(-50%) translateY(-3px);
+    box-shadow: 0 6px 25px rgba(30, 0, 255, 0.4);
+}
+
+.scroll-button .scroll-arrow {
+    font-size: 1.5rem;
+    color: var(--white);
+    line-height: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 @keyframes bounce {
@@ -182,15 +200,15 @@ body {
     50%,
     80%,
     100% {
-        transform: translateY(0);
+        transform: translateX(-50%) translateY(0);
     }
 
     40% {
-        transform: translateY(-10px);
+        transform: translateX(-50%) translateY(-10px);
     }
 
     60% {
-        transform: translateY(-5px);
+        transform: translateX(-50%) translateY(-5px);
     }
 }
 
@@ -680,6 +698,10 @@ body {
 /* Responsive Design */
 
 @media (max-width: 600px) {
+    .scroll-button {
+        display: flex;
+    }
+
     .projects-section {
         padding: 100px 20px;
     }
