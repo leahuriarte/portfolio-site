@@ -594,7 +594,7 @@ class ProjectsManager {
         ).join('');
 
         return `
-            <div class="project-card ${project.featured ? 'featured' : ''}" data-tags="${project.tags.join(' ')}">
+            <div class="project-card ${project.featured ? 'featured' : ''}" data-tags="${project.tags.join('|')}">
                 <div class="project-image">
                     ${imageContent}
                 </div>
@@ -666,19 +666,21 @@ class ProjectsManager {
 
         // Sort projects: matching ones first, then non-matching at bottom
         const sortedCards = cards.sort((a, b) => {
-            const aMatches = filter === 'all' || a.dataset.tags.split(' ').includes(filter);
-            const bMatches = filter === 'all' || b.dataset.tags.split(' ').includes(filter);
+            const aMatches = filter === 'all' || a.dataset.tags.split('|').includes(filter);
+            const bMatches = filter === 'all' || b.dataset.tags.split('|').includes(filter);
 
             if (aMatches && !bMatches) return -1;
             if (!aMatches && bMatches) return 1;
-            return 0;
+
+            // Randomize the order within matching and non-matching groups
+            return Math.random() - 0.5;
         });
 
         // Reorder DOM and update visibility
         sortedCards.forEach((card) => {
             grid.appendChild(card);
 
-            const cardMatches = filter === 'all' || card.dataset.tags.split(' ').includes(filter);
+            const cardMatches = filter === 'all' || card.dataset.tags.split('|').includes(filter);
             if (cardMatches) {
                 card.classList.remove('hidden');
             } else {
