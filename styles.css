@@ -374,7 +374,7 @@ body {
 .about-section {
     min-height: 100vh;
     background: var(--white);
-    padding: 100px 50px;
+    padding: 130px 50px 100px 50px;
     display: none;
 }
 
@@ -451,7 +451,7 @@ body {
     min-height: 100vh;
     background: var(--white);
     display: none;
-    padding: 100px 50px;
+    padding: 130px 50px 100px 50px;
 }
 
 .chat-section.active {
@@ -615,7 +615,7 @@ body {
     min-height: 100vh;
     background: var(--white);
     display: none;
-    padding: 100px 50px;
+    padding: 130px 50px 100px 50px;
 }
 
 .projects-section.active {
@@ -830,7 +830,7 @@ body {
     min-height: 100vh;
     background: var(--white);
     display: none;
-    padding: 100px 50px;
+    padding: 130px 50px 100px 50px;
 }
 
 .resume-section.active {
@@ -902,7 +902,11 @@ body {
     }
 
     .chat-section {
-        padding: 80px 20px;
+        padding: 110px 20px 80px 20px;
+    }
+
+    .chat-title {
+        margin-bottom: 80px;
     }
 
     .chat-content {
@@ -925,6 +929,7 @@ body {
         width: 100%;
         max-width: 350px;
         height: 350px;
+        order: -1;
     }
 
     .random-btn {
@@ -933,7 +938,7 @@ body {
     }
 
     .projects-section {
-        padding: 100px 20px;
+        padding: 130px 20px 100px 20px;
     }
 
     .projects-title {
@@ -989,7 +994,7 @@ body {
     }
 
     .about-section {
-        padding: 100px 20px;
+        padding: 130px 20px 100px 20px;
     }
 
     .about-container {
@@ -1020,7 +1025,7 @@ body {
     }
 
     .resume-section {
-        padding: 100px 20px;
+        padding: 130px 20px 100px 20px;
     }
 
     .resume-viewer {
@@ -1066,7 +1071,7 @@ body {
     }
 
     .about-section {
-        padding: 80px 20px;
+        padding: 110px 20px 80px 20px;
     }
 
     .about-container {
@@ -1079,11 +1084,11 @@ body {
     }
 
     .projects-section {
-        padding: 80px 20px;
+        padding: 110px 20px 80px 20px;
     }
 
     .resume-section {
-        padding: 80px 20px;
+        padding: 110px 20px 80px 20px;
     }
 
     .filter-container {
