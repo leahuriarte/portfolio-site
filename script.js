@@ -199,7 +199,9 @@ class ScrollEffects {
 
         // Initial check
         this.handleScroll();
-        this.updateNavVisibility();
+        if (this.nav) {
+            this.updateNavVisibility();
+        }
     }
 
     handleScroll() {
@@ -226,19 +228,23 @@ class ScrollEffects {
         }
 
         // Update navbar visibility
-        this.updateNavVisibility();
+        if (this.nav) {
+            this.updateNavVisibility();
+        }
 
         this.lastScrollY = scrollY;
     }
 
     handleMouseMove(e) {
         // Show navbar when mouse is near the top of the screen
-        if (e.clientY < 100) {
+        if (this.nav && e.clientY < 100) {
             this.nav.classList.remove('hidden');
         }
     }
 
     updateNavVisibility() {
+        if (!this.nav) return;
+
         const scrollY = window.scrollY;
         const onChatPage = document.querySelector('.chat-section.active');
 
