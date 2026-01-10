@@ -210,17 +210,19 @@ class ScrollEffects {
         this.scrollingDown = scrollY > this.lastScrollY;
 
         // Home section background parallax - extended range for smoother transition
-        if (scrollY < windowHeight * 1.2) {
+        if (this.homeSection && scrollY < windowHeight * 1.2) {
             const progress = scrollY / (windowHeight * 1.2);
             this.updateHomeSection(progress);
         }
 
         // Transition section content reveal
-        const transitionTop = this.transitionSection.offsetTop;
-        const transitionProgress = Math.max(0, Math.min(1, (scrollY - transitionTop + windowHeight * 0.8) / windowHeight));
+        if (this.transitionSection && this.contentReveal) {
+            const transitionTop = this.transitionSection.offsetTop;
+            const transitionProgress = Math.max(0, Math.min(1, (scrollY - transitionTop + windowHeight * 0.8) / windowHeight));
 
-        if (transitionProgress > 0.2 && !this.contentReveal.classList.contains('visible')) {
-            this.contentReveal.classList.add('visible');
+            if (transitionProgress > 0.2 && !this.contentReveal.classList.contains('visible')) {
+                this.contentReveal.classList.add('visible');
+            }
         }
 
         // Update navbar visibility
@@ -232,29 +234,40 @@ class ScrollEffects {
     handleMouseMove(e) {
         // Show navbar when mouse is near the top of the screen
         if (e.clientY < 100) {
-            this.nav.classList.add('visible');
+            this.nav.classList.remove('hidden');
         }
     }
 
     updateNavVisibility() {
         const scrollY = window.scrollY;
+        const onChatPage = document.querySelector('.chat-section.active');
 
-        // Always hide when scrolling down (except at very top)
-        if (this.scrollingDown && scrollY > 100) {
-            this.nav.classList.remove('visible');
-            this.nav.classList.remove('always-visible');
+        // On chat page: hide nav when scrolling down (except at very top)
+        if (onChatPage) {
+            if (this.scrollingDown && scrollY > 50) {
+                this.nav.classList.add('hidden');
+            }
+            // Show when scrolling up or at top
+            else {
+                this.nav.classList.remove('hidden');
+            }
         }
-        // Show when scrolling up
-        else if (!this.scrollingDown && scrollY > 100) {
-            this.nav.classList.add('visible');
-        }
-        // Always show at very top of page
-        else if (scrollY < 100) {
-            this.nav.classList.add('visible');
+        // On other pages: use original behavior
+        else {
+            // Always hide when scrolling down (except at very top)
+            if (this.scrollingDown && scrollY > 100) {
+                this.nav.classList.add('hidden');
+            }
+            // Show when scrolling up or at top
+            else {
+                this.nav.classList.remove('hidden');
+            }
         }
     }
 
     updateHomeSection(progress) {
+        if (!this.homeSection) return;
+
         const backgroundImage = document.querySelector('.background-image');
         const backgroundOverlay = document.querySelector('.background-overlay');
         const homeContent = document.querySelector('.home-content');
@@ -293,85 +306,342 @@ class ScrollEffects {
     }
 }
 
-// Navigation Manager
-class Navigation {
+// Spinner Manager
+class SpinnerManager {
     constructor() {
-        this.navBtns = document.querySelectorAll('.nav-btn');
-        this.actionBtns = document.querySelectorAll('.action-btn[data-section]');
-        this.sections = {
-            home: [document.getElementById('home'), document.getElementById('transition')],
-            about: [document.getElementById('about')],
-            projects: [document.getElementById('projects')],
-            resume: [document.getElementById('resume')]
-        };
-        
-        this.currentSection = 'home';
-        this.init();
+        this.interests = [
+            {
+                name: 'taylor swift world domination',
+                image: 'images/interests/taylor.png'
+            },
+            {
+                name: 'tigers (meow meow meow)',
+                image: 'images/interests/tiger.png'
+            },
+            {
+                name: 'theme parks',
+                image: 'images/interests/coaster.png'
+            },
+            {
+                name: 'claude (anthropic pls hire me)',
+                image: 'images/interests/claude.png'
+            },
+            {
+                name: 'broadway (the reason i want to move to nyc)',
+                image: 'images/interests/broadway.png'
+            },
+            {
+                name: 'addiction to twitter',
+                image: 'images/interests/twitter.png'
+            },
+            {
+                name: 'fixing punctuation on wikipedia',
+                image: 'images/interests/wikipedia.png'
+            },
+            {
+                name: 'reading bad thriller novels and then getting annoyed when they are bad',
+                image: 'images/interests/books.png'
+            },
+            {
+                name: 'jorts (the best article of clothing ever invented)',
+                image: 'images/interests/jorts.png'
+            }
+        ];
+
+        this.spinnerItems = document.getElementById('spinnerItems');
+        this.randomBtn = document.getElementById('randomBtn');
+        this.interestImage = document.getElementById('interestImage');
+        this.currentIndex = 0;
+        this.isScrolling = false;
+
+        if (this.spinnerItems && this.randomBtn) {
+            this.init();
+        }
     }
 
     init() {
-        // Add click handlers to nav buttons
-        this.navBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.showSection(btn.dataset.section);
-            });
-        });
+        this.renderSpinner();
+        this.randomBtn.addEventListener('click', () => this.spinToRandom());
+        this.spinnerItems.addEventListener('wheel', (e) => this.handleScroll(e));
 
-        // Add click handlers to action buttons
-        this.actionBtns.forEach(btn => {
-            btn.addEventListener('click', (e) => {
-                e.preventDefault();
-                this.showSection(btn.dataset.section);
-            });
-        });
-
-        // Handle browser back/forward
-        window.addEventListener('popstate', (e) => {
-            const section = e.state?.section || 'home';
-            this.showSection(section, false);
-        });
-    }
-
-    showSection(sectionName, pushState = true) {
-        // Hide all sections
-        Object.values(this.sections).flat().forEach(section => {
-            if (section) {
-                section.style.display = 'none';
-                section.classList.remove('active');
+        // Make spinner items clickable
+        this.spinnerItems.addEventListener('click', (e) => {
+            const item = e.target.closest('.spinner-item');
+            if (item) {
+                const index = parseInt(item.dataset.index);
+                const copyIndex = parseInt(item.dataset.copy);
+                this.scrollToIndexAndCopy(index, copyIndex);
             }
         });
 
-        // Show requested sections
-        if (this.sections[sectionName]) {
-            this.sections[sectionName].forEach(section => {
-                if (section) {
-                    section.style.display = sectionName === 'home' ? 'flex' : 'block';
-                    section.classList.add('active');
-                }
+        // Add drag functionality
+        this.addDragFunctionality();
+
+        // Set initial image
+        this.updateImage(0);
+    }
+
+    addDragFunctionality() {
+        let isDragging = false;
+        let startY = 0;
+        let startScrollY = 0;
+        let currentTransform = 0;
+
+        const wrapper = this.spinnerItems.parentElement;
+
+        wrapper.addEventListener('mousedown', (e) => {
+            isDragging = true;
+            startY = e.clientY;
+            const transform = this.spinnerItems.style.transform;
+            const match = transform.match(/translateY\((-?\d+\.?\d*)px\)/);
+            startScrollY = match ? parseFloat(match[1]) : 0;
+            wrapper.style.cursor = 'grabbing';
+        });
+
+        document.addEventListener('mousemove', (e) => {
+            if (!isDragging) return;
+
+            const deltaY = e.clientY - startY;
+            currentTransform = startScrollY + deltaY;
+            this.spinnerItems.style.transition = 'none';
+            this.spinnerItems.style.transform = `translateY(${currentTransform}px)`;
+        });
+
+        document.addEventListener('mouseup', () => {
+            if (!isDragging) return;
+            isDragging = false;
+            wrapper.style.cursor = 'grab';
+
+            // Snap to nearest item
+            const itemHeight = 100;
+            const containerHeight = 500;
+            const copies = 5;
+            const middleCopy = Math.floor(copies / 2);
+
+            // Calculate which item we're closest to
+            const currentOffset = currentTransform;
+            const baseOffset = containerHeight / 2 - itemHeight / 2;
+            const totalOffset = currentOffset - baseOffset;
+            const totalItems = this.interests.length;
+
+            // Find nearest item across all copies
+            const nearestTotalIndex = Math.round(-totalOffset / itemHeight);
+            const nearestIndex = ((nearestTotalIndex % totalItems) + totalItems) % totalItems;
+
+            this.spinnerItems.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+            this.scrollToIndex(nearestIndex);
+        });
+
+        wrapper.style.cursor = 'grab';
+    }
+
+    renderSpinner() {
+        // Create multiple copies for infinite scroll effect
+        const copies = 5;
+        let html = '';
+
+        for (let i = 0; i < copies; i++) {
+            this.interests.forEach((interest, index) => {
+                const actualIndex = index;
+                html += `<div class="spinner-item" data-index="${actualIndex}" data-copy="${i}">${interest.name}</div>`;
             });
         }
 
-        // Update nav buttons
-        this.navBtns.forEach(btn => {
-            btn.classList.toggle('active', btn.dataset.section === sectionName);
+        this.spinnerItems.innerHTML = html;
+
+        // Start with middle copy centered to create infinite look
+        const itemHeight = 100;
+        const containerHeight = 500;
+        const middleCopy = Math.floor(copies / 2);
+        // Center the first item of the middle copy
+        const offset = -(middleCopy * this.interests.length * itemHeight) + (containerHeight / 2 - itemHeight / 2);
+        this.spinnerItems.style.transform = `translateY(${offset}px)`;
+    }
+
+    scrollToIndexAndCopy(index, copyIndex) {
+        const itemHeight = 100;
+        const containerHeight = 500;
+        const totalItems = this.interests.length;
+        const copies = 5;
+        const middleCopy = Math.floor(copies / 2);
+
+        this.currentIndex = index;
+
+        // Calculate offset for the specific copy that was clicked
+        const targetIndex = copyIndex * totalItems + index;
+        const offset = containerHeight / 2 - itemHeight / 2 - (targetIndex * itemHeight);
+
+        // Set scrolling flag
+        this.isScrolling = true;
+
+        this.spinnerItems.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+        this.spinnerItems.style.transform = `translateY(${offset}px)`;
+
+        // After animation, snap back to middle copy if needed
+        setTimeout(() => {
+            if (copyIndex !== middleCopy) {
+                this.spinnerItems.style.transition = 'none';
+                const centerOffset = containerHeight / 2 - itemHeight / 2 - (middleCopy * totalItems + index) * itemHeight;
+                this.spinnerItems.style.transform = `translateY(${centerOffset}px)`;
+
+                setTimeout(() => {
+                    this.spinnerItems.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                    this.isScrolling = false;
+                }, 50);
+            } else {
+                this.isScrolling = false;
+            }
+        }, 500);
+
+        // Update selected state and opacity based on distance
+        document.querySelectorAll('.spinner-item').forEach(item => {
+            const itemIndex = parseInt(item.dataset.index);
+            const distance = Math.abs(itemIndex - index);
+
+            item.classList.remove('selected', 'near-selected', 'far-selected');
+
+            if (distance === 0) {
+                item.classList.add('selected');
+            } else if (distance === 1) {
+                item.classList.add('near-selected');
+            } else if (distance === 2) {
+                item.classList.add('far-selected');
+            }
         });
 
-        // Scroll to top of new section
-        if (sectionName !== 'home') {
-            window.scrollTo({ top: 0, behavior: 'smooth' });
+        this.updateImage(index);
+    }
+
+    scrollToIndex(index, animate = true, direction = 0) {
+        const itemHeight = 100;
+        const containerHeight = 500;
+        const totalItems = this.interests.length;
+        const copies = 5;
+        const middleCopy = Math.floor(copies / 2);
+
+        // Handle wrapping by using different copies
+        let targetCopy = middleCopy;
+
+        // If wrapping from last to first (going down)
+        if (this.currentIndex === totalItems - 1 && index === 0 && direction > 0) {
+            targetCopy = middleCopy + 1;
+        }
+        // If wrapping from first to last (going up)
+        else if (this.currentIndex === 0 && index === totalItems - 1 && direction < 0) {
+            targetCopy = middleCopy - 1;
+        }
+
+        this.currentIndex = index;
+
+        // Calculate offset using the appropriate copy
+        const targetIndex = targetCopy * totalItems + index;
+        const offset = containerHeight / 2 - itemHeight / 2 - (targetIndex * itemHeight);
+
+        // Set scrolling flag
+        this.isScrolling = true;
+
+        if (!animate) {
+            this.spinnerItems.style.transition = 'none';
         } else {
-            // For home, scroll to the actual home section
-            document.getElementById('home').scrollIntoView({ behavior: 'smooth' });
+            this.spinnerItems.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
         }
 
-        // Update browser history
-        if (pushState) {
-            const url = sectionName === 'home' ? '/' : `#${sectionName}`;
-            history.pushState({ section: sectionName }, '', url);
+        this.spinnerItems.style.transform = `translateY(${offset}px)`;
+
+        if (!animate) {
+            setTimeout(() => {
+                this.spinnerItems.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                this.isScrolling = false;
+            }, 50);
+        } else {
+            // After animation, snap back to middle copy if we wrapped
+            setTimeout(() => {
+                if (targetCopy !== middleCopy) {
+                    this.spinnerItems.style.transition = 'none';
+                    const centerOffset = containerHeight / 2 - itemHeight / 2 - (middleCopy * totalItems + index) * itemHeight;
+                    this.spinnerItems.style.transform = `translateY(${centerOffset}px)`;
+
+                    setTimeout(() => {
+                        this.spinnerItems.style.transition = 'transform 0.5s cubic-bezier(0.34, 1.56, 0.64, 1)';
+                        this.isScrolling = false;
+                    }, 50);
+                } else {
+                    this.isScrolling = false;
+                }
+            }, 500);
         }
 
-        this.currentSection = sectionName;
+        // Update selected state and opacity based on distance
+        document.querySelectorAll('.spinner-item').forEach(item => {
+            const itemIndex = parseInt(item.dataset.index);
+            const distance = Math.abs(itemIndex - index);
+
+            item.classList.remove('selected', 'near-selected', 'far-selected');
+
+            if (distance === 0) {
+                item.classList.add('selected');
+            } else if (distance === 1) {
+                item.classList.add('near-selected');
+            } else if (distance === 2) {
+                item.classList.add('far-selected');
+            }
+        });
+
+        this.updateImage(index);
+    }
+
+    handleScroll(e) {
+        e.preventDefault();
+
+        // Prevent scrolling during animation
+        if (this.isScrolling) {
+            return;
+        }
+
+        const delta = e.deltaY > 0 ? 1 : -1;
+        let newIndex = this.currentIndex + delta;
+
+        // Wrap around with seamless transition
+        if (newIndex < 0) {
+            newIndex = this.interests.length - 1;
+        } else if (newIndex >= this.interests.length) {
+            newIndex = 0;
+        }
+
+        this.scrollToIndex(newIndex, true, delta);
+    }
+
+    spinToRandom() {
+        // Add multiple rotations for effect
+        const randomIndex = Math.floor(Math.random() * this.interests.length);
+        const extraSpins = 2 + Math.floor(Math.random() * 3);
+        const totalIndex = randomIndex + (extraSpins * this.interests.length);
+
+        // Animate through the spins
+        const itemHeight = 100;
+        const containerHeight = 500;
+        const finalOffset = containerHeight / 2 - itemHeight / 2 - (totalIndex * itemHeight);
+
+        this.spinnerItems.style.transition = 'transform 2s cubic-bezier(0.25, 0.46, 0.45, 0.94)';
+        this.spinnerItems.style.transform = `translateY(${finalOffset}px)`;
+
+        setTimeout(() => {
+            this.scrollToIndex(randomIndex, false);
+        }, 2000);
+    }
+
+    updateImage(index) {
+        const interest = this.interests[index];
+        if (this.interestImage && interest) {
+            // Simply update the image (no transition needed since it spins continuously)
+            this.interestImage.src = interest.image;
+            this.interestImage.alt = interest.name;
+
+            // Handle image load errors
+            this.interestImage.onerror = () => {
+                console.log(`Image not found: ${interest.image}`);
+            };
+        }
     }
 }
 
@@ -739,20 +1009,16 @@ document.addEventListener('DOMContentLoaded', () => {
     new WatercolorPaint();
     // new MouseFollowTitle(); // Disabled for new layout
     new ScrollEffects();
-    new Navigation();
     new SmoothScroll();
     new ButtonEffects();
     new PerformanceManager();
-    new ProjectsManager();
 
-    // Handle initial URL
-    const currentHash = window.location.hash.substring(1);
-    if (currentHash && ['about', 'projects', 'resume'].includes(currentHash)) {
-        // Small delay to ensure everything is initialized
-        setTimeout(() => {
-            const nav = new Navigation();
-            nav.showSection(currentHash, false);
-        }, 100);
+    // Only initialize managers if their elements exist on the page
+    if (document.getElementById('projectsGrid')) {
+        new ProjectsManager();
+    }
+    if (document.getElementById('spinnerItems')) {
+        new SpinnerManager();
     }
 });
 

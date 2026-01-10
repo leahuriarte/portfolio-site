@@ -4,7 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Leah Uriarte</title>
+    <title>Leah Uriarte - Computer Science Student & Developer</title>
+    <meta name="description" content="Leah Uriarte - Computer Science student at Harvey Mudd College, Google intern, quantum computing researcher, and hackathon winner.">
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQCD722W1F"></script>
@@ -23,14 +24,20 @@
 <body>
     <!-- Navigation -->
     <nav class="nav">
-        <button class="nav-btn active" data-section="home">home</button>
-        <button class="nav-btn" data-section="about">about me</button>
-        <button class="nav-btn" data-section="projects">projects</button>
-        <button class="nav-btn" data-section="resume">resume</button>
+        <a href="index.html" class="nav-btn active">home</a>
+        <div class="nav-dropdown">
+            <a href="about.html" class="nav-btn">about me</a>
+            <div class="dropdown-menu">
+                <a href="about.html" class="dropdown-item">about me</a>
+                <a href="chat.html" class="dropdown-item">let's chat</a>
+            </div>
+        </div>
+        <a href="projects.html" class="nav-btn">projects</a>
+        <a href="resume.html" class="nav-btn">resume</a>
     </nav>
 
     <!-- Home Section -->
-    <section class="home-section" id="home">
+    <section class="home-section active" id="home">
         <canvas id="watercolorCanvas" class="watercolor-canvas"></canvas>
         <div class="home-content">
             <h1 class="main-title" id="mainTitle">
@@ -47,89 +54,26 @@
     </section>
 
     <!-- Transition Section -->
-    <section class="transition-section" id="transition">
+    <section class="transition-section active" id="transition">
         <div class="transition-content">
             <div class="content-reveal">
                 <p class="current-status">at the moment i'm:</p>
 
                 <div class="status-item">
                     <h2>studying computer science @<br>harvey mudd</h2>
-                    <button class="action-btn" data-section="about">learn more about me</button>
+                    <a href="about.html" class="action-btn">learn more about me</a>
                 </div>
 
                 <div class="status-item">
                     <h2>building cool projects</h2>
-                    <button class="action-btn" data-section="projects">check them out</button>
+                    <a href="projects.html" class="action-btn">check them out</a>
                 </div>
 
                 <div class="status-item">
                     <h2>a software developer intern @<br>google</h2>
-                    <button class="action-btn">download my resume</button>
+                    <a href="resume.html" class="action-btn">download my resume</a>
                 </div>
             </div>
-        </div>
-    </section>
-
-    <!-- About Section -->
-    <section class="about-section" id="about">
-        <div class="about-container">
-            <div class="about-content">
-                <h2 class="about-title">about me</h2>
-                <div class="about-text">
-                    <p>right now, i'm a sophomore at harvey mudd college, studying computer science (with a concentration
-                        in religious studies and chinese).</p>
-                    <p> i'm currently in the quantum quasars lab researching quantum position verification.</p>  
-                    <p>in summer 2025, i was an intern for google in mountain view. i worked for the books team in google search to build a bulk inference pipeline to classify books by subject heading (93% accuracy) </p>
-                    <p>before that, i was an apprentice for the us army. i designed and programmed a microfluidics robot
-                        to synthesize gold nanotriangles.</p>
-                    <p>also, i used to lead quantum computing research, with a focus on cryptography. read one of my
-                        papers <a
-                            href="https://www.researchgate.net/publication/384235254_A_meta-analysis_on_NIST_post-quantum_cryptographic_primitive_finalists"
-                            class="paper-link">here</a>.</p>
-                    <p>i am an avid hackathon enjoyer, i have won 7 so far.</p>
-                    <p>i love tigers, taylor swift, and roller coasters.</p>
-                </div>
-            </div>
-            <div class="avatar-container">
-                <div class="pixel-avatar">
-                    <img src="images/avatar-bitmap.png" alt="Leah's Avatar" class="avatar-image">
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Projects Section -->
-    <section class="projects-section" id="projects">
-        <div class="projects-container">
-            <h2 class="projects-title">projects</h2>
-
-            <!-- Filter Tags -->
-            <div class="filter-container">
-                <button class="filter-tag active" data-filter="all">all</button>
-                <button class="filter-tag" data-filter="python">python</button>
-                <button class="filter-tag" data-filter="web">web</button>
-                <button class="filter-tag" data-filter="ai">ai</button>
-                <button class="filter-tag" data-filter="nlp">nlp</button>
-                <button class="filter-tag" data-filter="rag">rag</button>
-                <button class="filter-tag" data-filter="react">react</button>
-                <button class="filter-tag" data-filter="machine learning">machine learning</button>
-            </div>
-
-            <!-- Projects Grid -->
-            <div class="projects-grid" id="projectsGrid">
-                <!-- Projects will be dynamically inserted here -->
-            </div>
-        </div>
-    </section>
-
-    <!-- Resume Section -->
-    <section class="resume-section" id="resume">
-        <div class="resume-container">
-            <h2 class="resume-title">resume</h2>
-            <div class="resume-viewer">
-                <iframe src="resume.pdf" class="pdf-iframe" title="Resume"></iframe>
-            </div>
-            <a href="resume.pdf" download="Leah_Uriarte_Resume.pdf" class="download-btn">download resume</a>
         </div>
     </section>
 

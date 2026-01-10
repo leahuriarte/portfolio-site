@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume - Leah Uriarte</title>
+    <meta name="description" content="Download Leah Uriarte's resume - Computer Science student, Google intern, and quantum computing researcher.">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQCD722W1F"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-TQCD722W1F');
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐯</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Archivo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="index.html" class="nav-btn">home</a>
+        <div class="nav-dropdown">
+            <a href="about.html" class="nav-btn">about me</a>
+            <div class="dropdown-menu">
+                <a href="about.html" class="dropdown-item">about me</a>
+                <a href="chat.html" class="dropdown-item">let's chat</a>
+            </div>
+        </div>
+        <a href="projects.html" class="nav-btn">projects</a>
+        <a href="resume.html" class="nav-btn active">resume</a>
+    </nav>
+
+    <!-- Resume Section -->
+    <section class="resume-section active" id="resume">
+        <div class="resume-container">
+            <h2 class="resume-title">resume</h2>
+            <div class="resume-viewer">
+                <iframe src="resume.pdf" class="pdf-iframe" title="Resume"></iframe>
+            </div>
+            <a href="resume.pdf" download="Leah_Uriarte_Resume.pdf" class="download-btn">download resume</a>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>

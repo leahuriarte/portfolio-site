@@ -1,0 +1,64 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>let's chat</title>
+    <meta name="description" content="my interests">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQCD722W1F"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-TQCD722W1F');
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐯</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Archivo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="index.html" class="nav-btn">home</a>
+        <div class="nav-dropdown">
+            <a href="about.html" class="nav-btn">about me</a>
+            <div class="dropdown-menu">
+                <a href="about.html" class="dropdown-item">about me</a>
+                <a href="chat.html" class="dropdown-item active">let's chat</a>
+            </div>
+        </div>
+        <a href="projects.html" class="nav-btn">projects</a>
+        <a href="resume.html" class="nav-btn">resume</a>
+    </nav>
+
+    <!-- Let's Chat Section -->
+    <section class="chat-section active" id="chat">
+        <div class="chat-container">
+            <h2 class="chat-title">let's chat</h2>
+            <div class="chat-content">
+                <div class="spinner-container">
+                    <div class="spinner-wrapper">
+                        <div class="spinner-items" id="spinnerItems">
+                            <!-- Spinner items will be populated by JavaScript -->
+                        </div>
+                    </div>
+                    <button class="random-btn" id="randomBtn">spin the wheel</button>
+                </div>
+                <div class="interest-display">
+                    <div class="interest-image-container">
+                        <img src="" alt="" class="interest-image" id="interestImage">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
