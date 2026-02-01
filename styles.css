@@ -1139,3 +1139,263 @@ body {
 .home-section.scrolled .background-image {
     transform: scale(1.2);
 }
+
+/* World/Globe Section */
+.world-section {
+    min-height: 100vh;
+    background: var(--white);
+    display: none;
+    padding: 100px 50px 50px 50px;
+}
+
+.world-section.active {
+    display: block;
+}
+
+.world-container {
+    max-width: 1400px;
+    margin: 0 auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    height: calc(100vh - 150px);
+}
+
+.world-title {
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: clamp(2rem, 6vw, 4rem);
+    font-weight: 400;
+    color: var(--blue-primary);
+    text-align: center;
+    line-height: 0.9;
+    margin-bottom: 10px;
+}
+
+.world-subtitle {
+    font-family: 'Archivo', sans-serif;
+    font-size: 1rem;
+    color: var(--gray-mid);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.globe-container {
+    flex: 1;
+    width: 100%;
+    max-width: 900px;
+    min-height: 500px;
+    position: relative;
+    border: 3px solid var(--blue-primary);
+    border-radius: 20px;
+    overflow: hidden;
+    background: radial-gradient(ellipse at center, #0a0a15 0%, #000005 60%, #000000 100%);
+    box-shadow: 0 8px 40px rgba(30, 0, 255, 0.2);
+}
+
+.globe-container canvas {
+    display: block;
+}
+
+.globe-controls {
+    margin-top: 15px;
+    text-align: center;
+}
+
+.control-hint {
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.85rem;
+    color: var(--gray-mid);
+    letter-spacing: 0.05em;
+}
+
+/* Photo Modal */
+.photo-modal {
+    display: none;
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 2000;
+    align-items: center;
+    justify-content: center;
+}
+
+.photo-modal.active {
+    display: flex;
+}
+
+.modal-overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.8);
+    backdrop-filter: blur(5px);
+}
+
+.modal-content {
+    position: relative;
+    background: var(--white);
+    border-radius: 16px;
+    padding: 40px;
+    max-width: 800px;
+    max-height: 85vh;
+    width: 90%;
+    overflow-y: auto;
+    box-shadow: 0 20px 60px rgba(30, 0, 255, 0.3);
+    border: 3px solid var(--blue-primary);
+    z-index: 2001;
+}
+
+.modal-close {
+    position: absolute;
+    top: 15px;
+    right: 20px;
+    background: none;
+    border: none;
+    font-size: 2rem;
+    color: var(--gray-mid);
+    cursor: pointer;
+    transition: all 0.2s ease;
+    line-height: 1;
+}
+
+.modal-close:hover {
+    color: var(--blue-primary);
+    transform: scale(1.1);
+}
+
+.modal-location {
+    font-family: 'UnifrakturMaguntia', cursive;
+    font-size: 2.5rem;
+    color: var(--blue-primary);
+    margin-bottom: 25px;
+    text-align: center;
+}
+
+.modal-photos {
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+}
+
+.modal-photo-item {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.modal-photo {
+    width: 100%;
+    max-height: 400px;
+    object-fit: cover;
+    border-radius: 12px;
+    border: 2px solid var(--gray-light);
+    transition: all 0.3s ease;
+}
+
+.modal-photo:hover {
+    border-color: var(--blue-primary);
+    transform: scale(1.01);
+}
+
+.modal-caption {
+    font-family: 'Archivo', sans-serif;
+    font-size: 1rem;
+    color: var(--black);
+    text-align: center;
+    line-height: 1.5;
+    opacity: 0.85;
+}
+
+/* Pin Tooltip */
+.pin-tooltip {
+    position: absolute;
+    background: var(--white);
+    color: var(--black);
+    padding: 8px 14px;
+    border-radius: 8px;
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.85rem;
+    font-weight: 600;
+    pointer-events: none;
+    z-index: 100;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    border: 2px solid var(--blue-primary);
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    white-space: nowrap;
+}
+
+.pin-tooltip.visible {
+    opacity: 1;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+    .world-section {
+        padding: 100px 20px 30px 20px;
+    }
+
+    .world-container {
+        height: auto;
+        min-height: calc(100vh - 130px);
+    }
+
+    .world-title {
+        font-size: clamp(1.8rem, 8vw, 3rem);
+    }
+
+    .globe-container {
+        min-height: 400px;
+        max-height: 60vh;
+    }
+
+    .modal-content {
+        padding: 30px 20px;
+        max-height: 80vh;
+    }
+
+    .modal-location {
+        font-size: 1.8rem;
+    }
+
+    .modal-photo {
+        max-height: 250px;
+    }
+}
+
+@media (max-width: 480px) {
+    .world-section {
+        padding: 90px 15px 20px 15px;
+    }
+
+    .world-title {
+        font-size: clamp(1.5rem, 8vw, 2.5rem);
+        margin-bottom: 5px;
+    }
+
+    .world-subtitle {
+        font-size: 0.85rem;
+        margin-bottom: 15px;
+    }
+
+    .globe-container {
+        min-height: 350px;
+        border-radius: 15px;
+    }
+
+    .modal-content {
+        padding: 25px 15px;
+    }
+
+    .modal-location {
+        font-size: 1.5rem;
+    }
+
+    .control-hint {
+        font-size: 0.75rem;
+    }
+}

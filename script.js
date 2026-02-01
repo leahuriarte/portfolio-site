@@ -1009,6 +1009,551 @@ class ProjectsManager {
     }
 }
 
+// Globe Manager for Commander Around the World
+class GlobeManager {
+    constructor() {
+        this.container = document.getElementById('globeContainer');
+        if (!this.container || typeof THREE === 'undefined') return;
+
+        // Each location has: name, lat, lng, and photos array with {src, caption}
+        this.locations = [
+            {
+                name: 'mount vesuvius',
+                lat: 40.8224,
+                lng: 14.4289,
+                photos: [
+                    { src: 'images/travel/vesuvius.jpeg', caption: 'at the crater' }
+                ]
+            },
+            {
+                name: 'herculaneum',
+                lat: 40.80617778,
+                lng: 14.34797500,
+                photos: [
+                    { src: 'images/travel/herculaneum.jpeg', caption: 'house of neptune and amphritite in the dining room' }
+                ]
+            },
+            {
+                name: 'pompeii',
+                lat: 40.7497,
+                lng: 14.5053,
+                photos: [
+                    { src: 'images/travel/pompeii1.jpeg', caption: 'thermopoliumg' },
+                    { src: 'images/travel/pompeii2.jpeg', caption: 'large theater' }
+                ]
+            },
+            {
+                name: 'st. peter\'s basilica',
+                lat: 41.9022,
+                lng: 12.4539,
+                photos: [
+                    { src: 'images/travel/stpeters2.jpeg', caption: 'the loggia of the blessings' },
+                    { src: 'images/travel/stpeters1.jpeg', caption: 'inside' }
+                ]
+            },
+            {
+                name: 'vatican museums',
+                lat: 41.9065,
+                lng: 12.4536,
+                photos: [
+                    { src: 'images/travel/vaticanmuseums.jpeg', caption: 'the school of athens' }
+                ]
+            },
+            {
+                name: 'papal audience',
+                lat: 41.9022,
+                lng: 12.4550,
+                photos: [
+                    { src: 'images/travel/papal.jpeg', caption: 'waiting for pope leo' },
+                    { src: 'images/travel/papal2.jpeg', caption: 'after' },
+                ]
+            },
+            {
+                name: 'colosseum',
+                lat: 41.8902,
+                lng: 12.4922,
+                photos: [
+                    { src: 'images/travel/colosseum1.png', caption: 'inside (arena floor!)' },
+                    { src: 'images/travel/colosseum2.png', caption: 'outside' },
+                ]
+            },
+            {
+                name: 'berlin zoo',
+                lat: 52.5085,
+                lng: 13.3364,
+                photos: [
+                    { src: 'images/travel/berlinzoo.png', caption: 'pandas!!! commander\'s cousin' }
+                ]
+            },
+            {
+                name: 'circle in the square theatre',
+                lat: 40.762012,
+                lng: -73.985184,
+                photos: [
+                    { src: 'images/travel/circleinthesquare.png', caption: 'seeing just in time with jonathan groff!' }
+                ]
+            }
+        ];
+
+        this.scene = null;
+        this.camera = null;
+        this.renderer = null;
+        this.globe = null;
+        this.globeGroup = null; // Group to hold globe and pins together
+        this.pins = [];
+        this.raycaster = new THREE.Raycaster();
+        this.mouse = new THREE.Vector2();
+        this.isDragging = false;
+        this.previousMousePosition = { x: 0, y: 0 };
+        this.tooltip = null;
+        this.hoveredPin = null;
+        this.dragDistance = 0;
+        this.mouseDownPos = { x: 0, y: 0 };
+
+        this.init();
+    }
+
+    init() {
+        this.setupScene();
+        this.createGlobe();
+        this.createPins();
+        this.createTooltip();
+        this.setupEventListeners();
+        this.setupModal();
+        this.animate();
+    }
+
+    setupScene() {
+        const width = this.container.clientWidth;
+        const height = this.container.clientHeight;
+
+        // Scene
+        this.scene = new THREE.Scene();
+
+        // Camera
+        this.camera = new THREE.PerspectiveCamera(45, width / height, 0.1, 1000);
+        this.camera.position.z = 3;
+
+        // Renderer
+        this.renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+        this.renderer.setSize(width, height);
+        this.renderer.setPixelRatio(Math.min(window.devicePixelRatio, 2));
+        this.container.appendChild(this.renderer.domElement);
+
+        // Lighting
+        const ambientLight = new THREE.AmbientLight(0xffffff, 0.6);
+        this.scene.add(ambientLight);
+
+        const directionalLight = new THREE.DirectionalLight(0xffffff, 0.8);
+        directionalLight.position.set(5, 3, 5);
+        this.scene.add(directionalLight);
+
+        // Add a subtle blue rim light for aesthetic
+        const rimLight = new THREE.DirectionalLight(0x1e00ff, 0.3);
+        rimLight.position.set(-5, 0, -5);
+        this.scene.add(rimLight);
+    }
+
+    createGlobe() {
+        // Create a group to hold globe, clouds, and pins together
+        this.globeGroup = new THREE.Group();
+        this.scene.add(this.globeGroup);
+
+        const geometry = new THREE.SphereGeometry(1, 64, 64);
+
+        // Load realistic NASA Earth textures
+        const textureLoader = new THREE.TextureLoader();
+
+        // NASA Blue Marble Earth texture
+        const earthTexture = textureLoader.load(
+            'https://unpkg.com/three-globe@2.31.1/example/img/earth-blue-marble.jpg',
+            () => {
+                // Texture loaded successfully
+                this.renderer.render(this.scene, this.camera);
+            }
+        );
+
+        // Bump map for terrain elevation
+        const bumpTexture = textureLoader.load(
+            'https://unpkg.com/three-globe@2.31.1/example/img/earth-topology.png'
+        );
+
+        // Specular map for water reflections
+        const specularTexture = textureLoader.load(
+            'https://unpkg.com/three-globe@2.31.1/example/img/earth-water.png'
+        );
+
+        const material = new THREE.MeshPhongMaterial({
+            map: earthTexture,
+            bumpMap: bumpTexture,
+            bumpScale: 0.02,
+            specularMap: specularTexture,
+            specular: new THREE.Color(0x333333),
+            shininess: 15
+        });
+
+        this.globe = new THREE.Mesh(geometry, material);
+        this.globeGroup.add(this.globe);
+
+        // Add clouds layer
+        const cloudsGeometry = new THREE.SphereGeometry(1.01, 64, 64);
+        const cloudsTexture = textureLoader.load(
+            'https://unpkg.com/three-globe@2.31.1/example/img/earth-clouds.png'
+        );
+        const cloudsMaterial = new THREE.MeshPhongMaterial({
+            map: cloudsTexture,
+            transparent: true,
+            opacity: 0.35,
+            depthWrite: false
+        });
+        this.clouds = new THREE.Mesh(cloudsGeometry, cloudsMaterial);
+        this.globeGroup.add(this.clouds);
+
+        // Add atmosphere glow
+        const atmosphereGeometry = new THREE.SphereGeometry(1.15, 64, 64);
+        const atmosphereMaterial = new THREE.ShaderMaterial({
+            vertexShader: `
+                varying vec3 vNormal;
+                void main() {
+                    vNormal = normalize(normalMatrix * normal);
+                    gl_Position = projectionMatrix * modelViewMatrix * vec4(position, 1.0);
+                }
+            `,
+            fragmentShader: `
+                varying vec3 vNormal;
+                void main() {
+                    float intensity = pow(0.65 - dot(vNormal, vec3(0.0, 0.0, 1.0)), 2.0);
+                    gl_FragColor = vec4(0.118, 0.0, 1.0, 1.0) * intensity;
+                }
+            `,
+            blending: THREE.AdditiveBlending,
+            side: THREE.BackSide,
+            transparent: true
+        });
+        const atmosphere = new THREE.Mesh(atmosphereGeometry, atmosphereMaterial);
+        this.globeGroup.add(atmosphere);
+
+        // Add star field background
+        this.createStars();
+    }
+
+    createStars() {
+        const starsGeometry = new THREE.BufferGeometry();
+        const starCount = 2000;
+        const positions = new Float32Array(starCount * 3);
+
+        for (let i = 0; i < starCount * 3; i += 3) {
+            const radius = 50 + Math.random() * 100;
+            const theta = Math.random() * Math.PI * 2;
+            const phi = Math.acos(2 * Math.random() - 1);
+
+            positions[i] = radius * Math.sin(phi) * Math.cos(theta);
+            positions[i + 1] = radius * Math.sin(phi) * Math.sin(theta);
+            positions[i + 2] = radius * Math.cos(phi);
+        }
+
+        starsGeometry.setAttribute('position', new THREE.BufferAttribute(positions, 3));
+
+        const starsMaterial = new THREE.PointsMaterial({
+            color: 0xffffff,
+            size: 0.5,
+            transparent: true,
+            opacity: 0.8
+        });
+
+        const stars = new THREE.Points(starsGeometry, starsMaterial);
+        this.scene.add(stars);
+    }
+
+    createPins() {
+        this.locations.forEach((location, index) => {
+            const pin = this.createPin(location, index);
+            this.pins.push(pin);
+            this.globeGroup.add(pin); // Add to globeGroup so pins rotate with Earth
+        });
+    }
+
+    createPin(location, index) {
+        const group = new THREE.Group();
+
+        // Convert lat/lng to 3D position
+        const phi = (90 - location.lat) * (Math.PI / 180);
+        const theta = (location.lng + 180) * (Math.PI / 180);
+        const radius = 1.02;
+
+        const x = -radius * Math.sin(phi) * Math.cos(theta);
+        const y = radius * Math.cos(phi);
+        const z = radius * Math.sin(phi) * Math.sin(theta);
+
+        group.position.set(x, y, z);
+
+        // Pin stem
+        const stemGeometry = new THREE.CylinderGeometry(0.008, 0.008, 0.08, 8);
+        const stemMaterial = new THREE.MeshBasicMaterial({ color: 0x1e00ff });
+        const stem = new THREE.Mesh(stemGeometry, stemMaterial);
+        stem.position.y = 0.04;
+        group.add(stem);
+
+        // Pin head (sphere)
+        const headGeometry = new THREE.SphereGeometry(0.025, 16, 16);
+        const headMaterial = new THREE.MeshBasicMaterial({ color: 0x1e00ff });
+        const head = new THREE.Mesh(headGeometry, headMaterial);
+        head.position.y = 0.09;
+        group.add(head);
+
+        // Add glow effect
+        const glowGeometry = new THREE.SphereGeometry(0.035, 16, 16);
+        const glowMaterial = new THREE.MeshBasicMaterial({
+            color: 0x1e00ff,
+            transparent: true,
+            opacity: 0.3
+        });
+        const glow = new THREE.Mesh(glowGeometry, glowMaterial);
+        glow.position.y = 0.09;
+        group.add(glow);
+
+        // Orient pin to point outward from globe center
+        group.lookAt(0, 0, 0);
+        group.rotateX(Math.PI);
+
+        // Store location data
+        group.userData = { location, index };
+
+        return group;
+    }
+
+    createTooltip() {
+        this.tooltip = document.createElement('div');
+        this.tooltip.className = 'pin-tooltip';
+        this.container.appendChild(this.tooltip);
+    }
+
+    setupEventListeners() {
+        const canvas = this.renderer.domElement;
+
+        // Mouse/touch events for rotation
+        canvas.addEventListener('mousedown', (e) => this.onMouseDown(e));
+        canvas.addEventListener('mousemove', (e) => this.onMouseMove(e));
+        canvas.addEventListener('mouseup', () => this.onMouseUp());
+        canvas.addEventListener('mouseleave', () => this.onMouseUp());
+
+        // Touch events
+        canvas.addEventListener('touchstart', (e) => this.onTouchStart(e));
+        canvas.addEventListener('touchmove', (e) => this.onTouchMove(e));
+        canvas.addEventListener('touchend', () => this.onMouseUp());
+
+        // Click for pin selection
+        canvas.addEventListener('click', (e) => this.onClick(e));
+
+        // Zoom
+        canvas.addEventListener('wheel', (e) => this.onWheel(e));
+
+        // Resize
+        window.addEventListener('resize', () => this.onResize());
+    }
+
+    onMouseDown(e) {
+        this.isDragging = true;
+        this.dragDistance = 0;
+        this.mouseDownPos = { x: e.clientX, y: e.clientY };
+        this.previousMousePosition = {
+            x: e.clientX,
+            y: e.clientY
+        };
+    }
+
+    onMouseMove(e) {
+        const rect = this.container.getBoundingClientRect();
+        this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+        if (this.isDragging) {
+            const deltaX = e.clientX - this.previousMousePosition.x;
+            const deltaY = e.clientY - this.previousMousePosition.y;
+
+            // Track total drag distance
+            this.dragDistance += Math.abs(deltaX) + Math.abs(deltaY);
+
+            // Rotate the entire group (globe + pins together)
+            this.globeGroup.rotation.y += deltaX * 0.005;
+            this.globeGroup.rotation.x += deltaY * 0.005;
+
+            // Clamp vertical rotation to prevent flipping
+            this.globeGroup.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.globeGroup.rotation.x));
+
+            this.previousMousePosition = {
+                x: e.clientX,
+                y: e.clientY
+            };
+        }
+
+        // Check for pin hover
+        this.checkPinHover(e);
+    }
+
+    onMouseUp() {
+        this.isDragging = false;
+    }
+
+    onTouchStart(e) {
+        if (e.touches.length === 1) {
+            this.isDragging = true;
+            this.previousMousePosition = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY
+            };
+        }
+    }
+
+    onTouchMove(e) {
+        if (this.isDragging && e.touches.length === 1) {
+            const deltaX = e.touches[0].clientX - this.previousMousePosition.x;
+            const deltaY = e.touches[0].clientY - this.previousMousePosition.y;
+
+            // Rotate the entire group (globe + pins together)
+            this.globeGroup.rotation.y += deltaX * 0.005;
+            this.globeGroup.rotation.x += deltaY * 0.005;
+
+            // Clamp vertical rotation
+            this.globeGroup.rotation.x = Math.max(-Math.PI / 2, Math.min(Math.PI / 2, this.globeGroup.rotation.x));
+
+            this.previousMousePosition = {
+                x: e.touches[0].clientX,
+                y: e.touches[0].clientY
+            };
+        }
+    }
+
+    checkPinHover(e) {
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+
+        // Create array of pin heads for intersection
+        const pinHeads = this.pins.map(pin => pin.children[1]); // Head is second child
+        const intersects = this.raycaster.intersectObjects(pinHeads, false);
+
+        if (intersects.length > 0) {
+            const pin = intersects[0].object.parent;
+            if (this.hoveredPin !== pin) {
+                this.hoveredPin = pin;
+                this.tooltip.textContent = pin.userData.location.name;
+                this.tooltip.classList.add('visible');
+            }
+
+            // Position tooltip
+            const rect = this.container.getBoundingClientRect();
+            this.tooltip.style.left = (e.clientX - rect.left + 15) + 'px';
+            this.tooltip.style.top = (e.clientY - rect.top - 10) + 'px';
+
+            this.container.style.cursor = 'pointer';
+        } else {
+            this.hoveredPin = null;
+            this.tooltip.classList.remove('visible');
+            this.container.style.cursor = 'grab';
+        }
+    }
+
+    onClick(e) {
+        // Only register click if we didn't drag much (threshold of 5 pixels)
+        if (this.dragDistance > 5) return;
+
+        const rect = this.container.getBoundingClientRect();
+        this.mouse.x = ((e.clientX - rect.left) / rect.width) * 2 - 1;
+        this.mouse.y = -((e.clientY - rect.top) / rect.height) * 2 + 1;
+
+        this.raycaster.setFromCamera(this.mouse, this.camera);
+
+        const pinHeads = this.pins.map(pin => pin.children[1]);
+        const intersects = this.raycaster.intersectObjects(pinHeads, false);
+
+        if (intersects.length > 0) {
+            const pin = intersects[0].object.parent;
+            this.openModal(pin.userData.location);
+        }
+    }
+
+    onWheel(e) {
+        e.preventDefault();
+        const zoomSpeed = 0.001;
+        this.camera.position.z += e.deltaY * zoomSpeed;
+        this.camera.position.z = Math.max(1.5, Math.min(5, this.camera.position.z));
+    }
+
+    onResize() {
+        const width = this.container.clientWidth;
+        const height = this.container.clientHeight;
+
+        this.camera.aspect = width / height;
+        this.camera.updateProjectionMatrix();
+        this.renderer.setSize(width, height);
+    }
+
+    setupModal() {
+        const modal = document.getElementById('photoModal');
+        const overlay = document.getElementById('modalOverlay');
+        const closeBtn = document.getElementById('modalClose');
+
+        if (overlay) {
+            overlay.addEventListener('click', () => this.closeModal());
+        }
+        if (closeBtn) {
+            closeBtn.addEventListener('click', () => this.closeModal());
+        }
+
+        // Close on escape key
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'Escape') this.closeModal();
+        });
+    }
+
+    openModal(location) {
+        const modal = document.getElementById('photoModal');
+        const locationEl = document.getElementById('modalLocation');
+        const photosEl = document.getElementById('modalPhotos');
+
+        if (!modal || !locationEl || !photosEl) return;
+
+        locationEl.textContent = location.name;
+
+        // Generate photos HTML
+        if (location.photos && location.photos.length > 0) {
+            photosEl.innerHTML = location.photos.map(photo => `
+                <div class="modal-photo-item">
+                    <img src="${photo.src}" alt="${photo.caption}" class="modal-photo"
+                         onerror="this.style.display='none'; this.nextElementSibling.textContent='photo coming soon...'">
+                    <p class="modal-caption">${photo.caption}</p>
+                </div>
+            `).join('');
+        } else {
+            photosEl.innerHTML = '<p class="modal-caption">photos coming soon...</p>';
+        }
+
+        modal.classList.add('active');
+    }
+
+    closeModal() {
+        const modal = document.getElementById('photoModal');
+        if (modal) {
+            modal.classList.remove('active');
+        }
+    }
+
+    animate() {
+        requestAnimationFrame(() => this.animate());
+
+        // Slow auto-rotation when not dragging
+        if (!this.isDragging && this.globeGroup) {
+            this.globeGroup.rotation.y += 0.001;
+        }
+
+        // Rotate clouds slightly faster than the globe for realism
+        if (this.clouds) {
+            this.clouds.rotation.y += 0.0002; // Extra rotation on top of group rotation
+        }
+
+        this.renderer.render(this.scene, this.camera);
+    }
+}
+
 // Initialize everything when DOM is loaded
 document.addEventListener('DOMContentLoaded', () => {
     // Initialize all components
@@ -1025,6 +1570,9 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     if (document.getElementById('spinnerItems')) {
         new SpinnerManager();
+    }
+    if (document.getElementById('globeContainer')) {
+        new GlobeManager();
     }
 });
 

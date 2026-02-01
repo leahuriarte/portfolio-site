@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>commander around the world</title>
+    <meta name="description" content="explore commander's adventures around the world - an interactive globe with photos and memories.">
+
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQCD722W1F"></script>
+    <script>
+        window.dataLayer = window.dataLayer || [];
+        function gtag(){dataLayer.push(arguments);}
+        gtag('js', new Date());
+        gtag('config', 'G-TQCD722W1F');
+    </script>
+
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>🐯</text></svg>">
+    <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Archivo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <!-- Navigation -->
+    <nav class="nav">
+        <a href="index.html" class="nav-btn">home</a>
+        <div class="nav-dropdown">
+            <a href="about.html" class="nav-btn">about me</a>
+            <div class="dropdown-menu">
+                <a href="about.html" class="dropdown-item">about me</a>
+                <a href="chat.html" class="dropdown-item">my interests</a>
+                <a href="world.html" class="dropdown-item active">commander around the world</a>
+            </div>
+        </div>
+        <a href="projects.html" class="nav-btn">projects</a>
+        <a href="resume.html" class="nav-btn">resume</a>
+    </nav>
+
+    <!-- World Section -->
+    <section class="world-section active" id="world">
+        <div class="world-container">
+            <h2 class="world-title">commander around the world</h2>
+            <p class="world-subtitle">click a pin to see photos and memories</p>
+            <div class="globe-container" id="globeContainer">
+                <!-- Three.js globe will be rendered here -->
+            </div>
+            <div class="globe-controls">
+                <span class="control-hint">drag to rotate | scroll to zoom</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- Photo Modal -->
+    <div class="photo-modal" id="photoModal">
+        <div class="modal-overlay" id="modalOverlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">&times;</button>
+            <h3 class="modal-location" id="modalLocation"></h3>
+            <div class="modal-photos" id="modalPhotos">
+                <!-- Photos will be inserted here -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Three.js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
