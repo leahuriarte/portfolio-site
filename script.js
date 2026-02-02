@@ -1092,6 +1092,54 @@ class GlobeManager {
                 photos: [
                     { src: 'images/travel/circleinthesquare.png', caption: 'seeing just in time with jonathan groff!' }
                 ]
+            },
+            {
+                name: 'gershwin theatre',
+                lat: 40.762012,
+                lng: -73.985184,
+                photos: [
+                    { src: 'images/travel/gershwin.jpeg', caption: 'we were changed for good' }
+                ]
+            },
+            {
+                name: 'lyceum theatre',
+                lat: 40.757702,
+                lng: -73.984772,
+                photos: [
+                    { src: 'images/travel/lyceum.jpeg', caption: 'oh mary! with jane krakowski' }
+                ]
+            },
+            {
+                name: 'imperial theatre',
+                lat: 40.7590,
+                lng: -73.9874,
+                photos: [
+                    { src: 'images/travel/chess.jpeg', caption: 'seeing chess!' }
+                ]
+            },
+            {
+                name: 'walter kerr theatre',
+                lat: 40.7590,
+                lng: -73.9857,
+                photos: [
+                    { src: 'images/travel/walterkerr.jpeg', caption: 'seeing chess!' }
+                ]
+            },
+            {
+                name: 'greek theatre',
+                lat: 37.87421,
+                lng: -122.255569,
+                photos: [
+                    { src: 'images/travel/greektheater.jpeg', caption: 'seeing lucy dacus!' }
+                ]
+            },
+            {
+                name: 'main street cupertino',
+                lat: 37.3241,
+                lng: -122.0105,
+                photos: [
+                    { src: 'images/travel/greektheater.jpeg', caption: 'seeing lucy dacus!' }
+                ]
             }
         ];
 
