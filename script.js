@@ -1168,6 +1168,7 @@ class GlobeManager {
         this.createTooltip();
         this.setupEventListeners();
         this.setupModal();
+        this.createFilmReels();
         this.animate();
     }
 
@@ -1335,29 +1336,29 @@ class GlobeManager {
 
         group.position.set(x, y, z);
 
-        // Pin stem
-        const stemGeometry = new THREE.CylinderGeometry(0.008, 0.008, 0.08, 8);
+        // Pin stem - skinnier and cuter
+        const stemGeometry = new THREE.CylinderGeometry(0.003, 0.003, 0.06, 8);
         const stemMaterial = new THREE.MeshBasicMaterial({ color: 0x1e00ff });
         const stem = new THREE.Mesh(stemGeometry, stemMaterial);
-        stem.position.y = 0.04;
+        stem.position.y = 0.03;
         group.add(stem);
 
-        // Pin head (sphere)
-        const headGeometry = new THREE.SphereGeometry(0.025, 16, 16);
+        // Pin head (small sphere)
+        const headGeometry = new THREE.SphereGeometry(0.015, 16, 16);
         const headMaterial = new THREE.MeshBasicMaterial({ color: 0x1e00ff });
         const head = new THREE.Mesh(headGeometry, headMaterial);
-        head.position.y = 0.09;
+        head.position.y = 0.07;
         group.add(head);
 
-        // Add glow effect
-        const glowGeometry = new THREE.SphereGeometry(0.035, 16, 16);
+        // Add glow effect - smaller to match
+        const glowGeometry = new THREE.SphereGeometry(0.022, 16, 16);
         const glowMaterial = new THREE.MeshBasicMaterial({
             color: 0x1e00ff,
             transparent: true,
-            opacity: 0.3
+            opacity: 0.4
         });
         const glow = new THREE.Mesh(glowGeometry, glowMaterial);
-        glow.position.y = 0.09;
+        glow.position.y = 0.07;
         group.add(glow);
 
         // Orient pin to point outward from globe center
@@ -1583,6 +1584,81 @@ class GlobeManager {
         if (modal) {
             modal.classList.remove('active');
         }
+    }
+
+    createFilmReels() {
+        const reel1 = document.getElementById('filmReel1');
+        const reel2 = document.getElementById('filmReel2');
+
+        if (!reel1 || !reel2) return;
+
+        // Collect all photos from all locations
+        const allPhotos = [];
+        this.locations.forEach(location => {
+            if (location.photos && location.photos.length > 0) {
+                location.photos.forEach(photo => {
+                    allPhotos.push({
+                        ...photo,
+                        locationName: location.name
+                    });
+                });
+            }
+        });
+
+        // Shuffle photos for variety
+        const shuffled = [...allPhotos].sort(() => Math.random() - 0.5);
+
+        // Split into two groups for the two reels
+        const half = Math.ceil(shuffled.length / 2);
+        const reel1Photos = shuffled.slice(0, half);
+        const reel2Photos = shuffled.slice(half);
+
+        // Create film frames - duplicate for seamless loop
+        const createFrames = (photos) => {
+            return photos.map(photo => `
+                <div class="film-frame" data-src="${photo.src}" data-caption="${photo.caption}" data-location="${photo.locationName}">
+                    <img src="${photo.src}" alt="${photo.caption}" loading="lazy">
+                    <div class="film-overlay">
+                        <span>${photo.locationName}</span>
+                    </div>
+                </div>
+            `).join('');
+        };
+
+        // Duplicate content for seamless infinite scroll
+        const reel1Content = createFrames(reel1Photos);
+        const reel2Content = createFrames(reel2Photos);
+
+        reel1.innerHTML = reel1Content + reel1Content;
+        reel2.innerHTML = reel2Content + reel2Content;
+
+        // Add click handlers to film frames
+        document.querySelectorAll('.film-frame').forEach(frame => {
+            frame.addEventListener('click', () => {
+                const src = frame.dataset.src;
+                const caption = frame.dataset.caption;
+                const locationName = frame.dataset.location;
+                this.openPhotoFromReel(src, caption, locationName);
+            });
+        });
+    }
+
+    openPhotoFromReel(src, caption, locationName) {
+        const modal = document.getElementById('photoModal');
+        const locationEl = document.getElementById('modalLocation');
+        const photosEl = document.getElementById('modalPhotos');
+
+        if (!modal || !locationEl || !photosEl) return;
+
+        locationEl.textContent = locationName;
+        photosEl.innerHTML = `
+            <div class="modal-photo-item">
+                <img src="${src}" alt="${caption}" class="modal-photo">
+                <p class="modal-caption">${caption}</p>
+            </div>
+        `;
+
+        modal.classList.add('active');
     }
 
     animate() {

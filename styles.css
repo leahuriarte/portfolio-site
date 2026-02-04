@@ -1145,7 +1145,8 @@ body {
     min-height: 100vh;
     background: var(--white);
     display: none;
-    padding: 100px 50px 50px 50px;
+    padding: 100px 50px 30px 50px;
+    overflow-x: hidden;
 }
 
 .world-section.active {
@@ -1158,7 +1159,6 @@ body {
     display: flex;
     flex-direction: column;
     align-items: center;
-    height: calc(100vh - 150px);
 }
 
 .world-title {
@@ -1180,10 +1180,9 @@ body {
 }
 
 .globe-container {
-    flex: 1;
     width: 100%;
-    max-width: 900px;
-    min-height: 500px;
+    max-width: 800px;
+    height: 450px;
     position: relative;
     border: 3px solid var(--blue-primary);
     border-radius: 20px;
@@ -1289,11 +1288,12 @@ body {
 
 .modal-photo {
     width: 100%;
-    max-height: 400px;
-    object-fit: cover;
+    max-height: 500px;
+    object-fit: contain;
     border-radius: 12px;
     border: 2px solid var(--gray-light);
     transition: all 0.3s ease;
+    background: var(--gray-light);
 }
 
 .modal-photo:hover {
@@ -1341,7 +1341,6 @@ body {
 
     .world-container {
         height: auto;
-        min-height: calc(100vh - 130px);
     }
 
     .world-title {
@@ -1349,8 +1348,7 @@ body {
     }
 
     .globe-container {
-        min-height: 400px;
-        max-height: 60vh;
+        height: 380px;
     }
 
     .modal-content {
@@ -1363,7 +1361,7 @@ body {
     }
 
     .modal-photo {
-        max-height: 250px;
+        max-height: 350px;
     }
 }
 
@@ -1383,7 +1381,7 @@ body {
     }
 
     .globe-container {
-        min-height: 350px;
+        height: 320px;
         border-radius: 15px;
     }
 
@@ -1397,5 +1395,181 @@ body {
 
     .control-hint {
         font-size: 0.75rem;
+    }
+}
+
+/* Film Strip Photo Reels */
+.film-reels-section {
+    width: 100vw;
+    margin-left: calc(-50vw + 50%);
+    overflow: hidden;
+    padding: 50px 0 30px 0;
+    position: relative;
+    background: linear-gradient(to bottom, transparent, rgba(30, 0, 255, 0.02));
+}
+
+.film-reel-container {
+    width: 100%;
+    overflow: hidden;
+    margin-bottom: 20px;
+    position: relative;
+    transform: rotate(-4deg);
+    padding: 10px 0;
+}
+
+.film-reel-container.reel-container-2 {
+    transform: rotate(4deg);
+    margin-top: -35px;
+}
+
+.film-reel {
+    display: flex;
+    gap: 15px;
+    animation: scroll-reel 40s linear infinite;
+    width: max-content;
+}
+
+.reel-2 {
+    animation: scroll-reel-reverse 35s linear infinite;
+}
+
+@keyframes scroll-reel {
+    0% {
+        transform: translateX(0);
+    }
+    100% {
+        transform: translateX(-50%);
+    }
+}
+
+@keyframes scroll-reel-reverse {
+    0% {
+        transform: translateX(-50%);
+    }
+    100% {
+        transform: translateX(0);
+    }
+}
+
+.film-frame {
+    flex-shrink: 0;
+    width: 150px;
+    height: 110px;
+    background: var(--blue-primary);
+    border-radius: 3px;
+    position: relative;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    overflow: visible;
+    border: 2px solid var(--blue-primary);
+    box-shadow: 0 0 15px rgba(30, 0, 255, 0.4), 0 0 30px rgba(30, 0, 255, 0.2);
+}
+
+.film-frame:hover {
+    transform: scale(1.12) rotate(2deg);
+    z-index: 10;
+    border-color: var(--blue-light);
+    box-shadow: 0 0 20px rgba(30, 0, 255, 0.6), 0 0 40px rgba(30, 0, 255, 0.3);
+}
+
+/* Film sprocket holes - light blue/white style */
+.film-frame::before,
+.film-frame::after {
+    content: '';
+    position: absolute;
+    top: 6px;
+    bottom: 6px;
+    width: 10px;
+    background: repeating-linear-gradient(
+        to bottom,
+        transparent 0px,
+        transparent 5px,
+        rgba(255, 255, 255, 0.7) 5px,
+        rgba(255, 255, 255, 0.7) 12px,
+        transparent 12px,
+        transparent 17px
+    );
+    z-index: 2;
+    border-radius: 2px;
+}
+
+.film-frame::before {
+    left: 2px;
+}
+
+.film-frame::after {
+    right: 2px;
+}
+
+.film-frame img {
+    width: calc(100% - 28px);
+    height: calc(100% - 12px);
+    object-fit: cover;
+    position: absolute;
+    left: 14px;
+    top: 6px;
+    border-radius: 2px;
+}
+
+.film-frame .film-overlay {
+    position: absolute;
+    bottom: 6px;
+    left: 14px;
+    right: 14px;
+    padding: 5px 4px;
+    background: linear-gradient(transparent, rgba(0,0,0,0.9));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+    border-radius: 0 0 2px 2px;
+}
+
+.film-frame:hover .film-overlay {
+    opacity: 1;
+}
+
+.film-overlay span {
+    font-family: 'Archivo', sans-serif;
+    font-size: 0.6rem;
+    color: white;
+    display: block;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.5);
+}
+
+/* Pause animation on hover */
+.film-reel-container:hover .film-reel {
+    animation-play-state: paused;
+}
+
+@media (max-width: 768px) {
+    .film-frame {
+        width: 130px;
+        height: 100px;
+    }
+
+    .film-reels-section {
+        padding: 30px 0 15px 0;
+    }
+}
+
+@media (max-width: 480px) {
+    .film-frame {
+        width: 110px;
+        height: 85px;
+    }
+
+    .film-reel {
+        gap: 10px;
+    }
+
+    .film-reel-container {
+        transform: rotate(-2deg);
+    }
+
+    .film-reel-container.reel-container-2 {
+        transform: rotate(2deg);
     }
 }
