@@ -1145,7 +1145,7 @@ class GlobeManager {
             {
                 name: 'laguna beach',
                 lat: 33.52003,
-                lng: 117.76420,
+                lng: -117.76420,
                 photos: [
                     { src: 'images/travel/lagunabeach.jpeg', caption: 'at the beach (shoutout hmc bio department)' }
                 ]
@@ -1153,7 +1153,7 @@ class GlobeManager {
             {
                 name: 'chapultapec castle',
                 lat: 19.42066,
-                lng: 99.18144,
+                lng: -99.18144,
                 photos: [
                     { src: 'images/travel/chapultapec2.jpeg', caption: 'porfirio diaz\'s bedroom' },
                     { src: 'images/travel/chapultapec.jpeg', caption: 'billiards room (former observatory' },
@@ -1162,7 +1162,7 @@ class GlobeManager {
             {
                 name: 'teotihuacan',
                 lat: 19.42066,
-                lng: 99.18144,
+                lng: -99.18144,
                 photos: [
                     { src: 'images/travel/teotihuacan.jpeg', caption: 'pirámide de la luna' },
                     { src: 'images/travel/teotihuacan2.jpeg', caption: 'pirámide de la serpiente emplumada' },
@@ -1171,7 +1171,7 @@ class GlobeManager {
             {
                 name: 'iglesia nuestra señora de pilar',
                 lat: 19.43588,
-                lng: 99.13232,
+                lng: -99.13232,
                 photos: [
                     { src: 'images/travel/iglesia.jpeg', caption: 'altar' },
                     { src: 'images/travel/iglesia2.jpeg', caption: 'pew' },
@@ -1180,7 +1180,7 @@ class GlobeManager {
             {
                 name: 'metropolitan cathedral',
                 lat: 19.43446,
-                lng: 99.13289,
+                lng: -99.13289,
                 photos: [
                     { src: 'images/travel/metropolitancathedral.jpeg', caption: 'altar' },
                 ]
@@ -1188,7 +1188,7 @@ class GlobeManager {
             {
                 name: 'trotsky\'s house',
                 lat: 19.35778,
-                lng: 99.15927,
+                lng: -99.15927,
                 photos: [
                     { src: 'images/travel/trotsky2.jpeg', caption: 'his office' },
                     { src: 'images/travel/trotsky.jpeg', caption: 'grave' },
@@ -1197,7 +1197,7 @@ class GlobeManager {
             {
                 name: 'museo national de antropologia',
                 lat: 19.35778,
-                lng: 99.15927,
+                lng: -99.15927,
                 photos: [
                     { src: 'images/travel/museoantropologia.jpeg', caption: 'aztec sun stone (calendar + altar for human sacrifice)' },
                 ]
