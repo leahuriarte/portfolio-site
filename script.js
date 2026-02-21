@@ -351,7 +351,8 @@ class SpinnerManager {
             {
                 name: 'jorts (the best article of clothing ever invented)',
                 image: 'images/interests/jorts.png'
-            }
+            },
+            
         ];
 
         this.spinnerItems = document.getElementById('spinnerItems');
@@ -1139,6 +1140,58 @@ class GlobeManager {
                 lng: -122.0105,
                 photos: [
                     { src: 'images/travel/greektheater.jpeg', caption: 'seeing lucy dacus!' }
+                ]
+            },
+            {
+                name: 'laguna beach',
+                lat: 33.52003,
+                lng: 117.76420,
+                photos: [
+                    { src: 'images/travel/lagunabeach.jpeg', caption: 'at the beach (shoutout hmc bio department)' }
+                ]
+            },
+            {
+                name: 'chapultapec castle',
+                lat: 19.42066,
+                lng: 99.18144,
+                photos: [
+                    { src: 'images/travel/chapultapec2.jpeg', caption: 'porfirio diaz\'s bedroom' },
+                    { src: 'images/travel/chapultapec.jpeg', caption: 'billiards room (former observatory' },
+                ]
+            },
+            {
+                name: 'teotihuacan',
+                lat: 19.42066,
+                lng: 99.18144,
+                photos: [
+                    { src: 'images/travel/teotihuacan.jpeg', caption: 'pirámide de la luna' },
+                    { src: 'images/travel/teotihuacan2.jpeg', caption: 'pirámide de la serpiente emplumada' },
+                ]
+            },
+            {
+                name: 'iglesia nuestra señora de pilar',
+                lat: 19.43588,
+                lng: 99.13232,
+                photos: [
+                    { src: 'images/travel/iglesia.jpeg', caption: 'altar' },
+                    { src: 'images/travel/iglesia2.jpeg', caption: 'pew' },
+                ]
+            },
+            {
+                name: 'metropolitan cathedral',
+                lat: 19.43446,
+                lng: 99.13289,
+                photos: [
+                    { src: 'images/travel/metropolitancathedral.jpeg', caption: 'altar' },
+                ]
+            },
+            {
+                name: 'trotsky\'s house',
+                lat: 19.35778,
+                lng: 99.15927,
+                photos: [
+                    { src: 'images/travel/trotsky2.jpeg', caption: 'his office' },
+                    { src: 'images/travel/trotsky.jpeg', caption: 'grave' },
                 ]
             }
         ];
