@@ -1193,6 +1193,14 @@ class GlobeManager {
                     { src: 'images/travel/trotsky2.jpeg', caption: 'his office' },
                     { src: 'images/travel/trotsky.jpeg', caption: 'grave' },
                 ]
+            },
+            {
+                name: 'museo national de antropologia',
+                lat: 19.35778,
+                lng: 99.15927,
+                photos: [
+                    { src: 'images/travel/museoantropologia.jpeg', caption: 'aztec sun stone (calendar + altar for human sacrifice)' },
+                ]
             }
         ];
 
