@@ -44,6 +44,26 @@
             image-rendering: -moz-crisp-edges;
             image-rendering: crisp-edges;
         }
+        /* On narrow screens, stack the avatar at the top-center so it
+           doesn't overlap the text column (which drops below it). Use
+           absolute (not fixed) so it scrolls away with the page. */
+        @media (max-width: 1000px) {
+            .tiger-avatar {
+                position: absolute;
+                top: 130px;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+            .tiger-avatar img {
+                width: 300px;
+            }
+        }
+        /* Gives the document real height so the page can scroll; the canvas
+           text/tiger are drawn fixed and offset by scrollY in JS. */
+        #about-spacer {
+            width: 100%;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -71,7 +91,10 @@
         <img src="images/avatar-bitmap.png" alt="Leah's Avatar">
     </div>
 
-    <script type="module" src="tiger-about.js"></script>
+    <!-- Sized by JS to the full canvas content height so the page scrolls -->
+    <div id="about-spacer" aria-hidden="true"></div>
+
+    <script type="module" src="tiger-about.js?v=4"></script>
     <script src="script.js"></script>
 </body>
 
