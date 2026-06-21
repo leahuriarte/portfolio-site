@@ -30,11 +30,16 @@ let geo = null;
 function computeGeo() {
   const W        = window.innerWidth;
   const H        = window.innerHeight;
-  // Reserve right margin for the avatar (200px) plus a gap
-  const avatarGap  = W > 700 ? 220 : 0;
+  // Matches the CSS breakpoint in about.html: below this the avatar stacks
+  // on top of the text instead of sitting in the right half.
+  const NARROW     = W <= 1000;
+  // Wide: reserve the right portion for the avatar (360px wide, centered at
+  // 75%). Narrow: avatar moves to the top, so no horizontal reservation but
+  // we push the text down below it.
+  const avatarGap  = NARROW ? 0 : Math.round(W * 0.25 + 200);
   const colW       = Math.min(580, W - 96 - avatarGap);
   const colX       = Math.max(24, (W - colW - avatarGap) / 2);
-  const topY       = 96;   // below fixed nav
+  const topY       = NARROW ? 460 : 96;   // below fixed nav (or below stacked avatar)
   const fontSize   = Math.max(14, Math.min(17, Math.round(colW / 36)));
   const lineHeight = Math.round(fontSize * 1.68);
   const font       = `${fontSize}px 'Archivo', sans-serif`;
@@ -137,9 +142,11 @@ function drawTiger(box) {
 }
 
 // ── text layout ───────────────────────────────────────────────────────────────
-let layoutLines     = null;  // [{text, x, y, isTitle?, isLink?}]
-let layoutTigerBox  = null;  // tiger box snapshot used to build current layout
-let linkHitBox      = null;  // {x1, x2, y1, y2} for "here" link
+let layoutLines     = null;  // [{text, x, y, isTitle?, isLink?}] in document coords
+let layoutTigerBox  = null;  // tiger box snapshot (document coords) used to build current layout
+let linkHitBox      = null;  // {x1, x2, y1, y2} for "here" link, in document coords
+let contentHeight   = 0;     // total document height of the laid-out text
+const scrollSpacer  = document.getElementById('about-spacer');
 
 function layoutDirty(box) {
   if (!layoutLines || !box !== !layoutTigerBox) return true;
@@ -202,6 +209,7 @@ function buildLayout(tigerBox) {
     y += lineHeight * 0.55; // paragraph gap
   }
 
+  contentHeight = Math.round(y + lineHeight); // bottom padding
   return lines;
 }
 
@@ -227,7 +235,8 @@ function measureLinkHit(lines) {
 canvas.addEventListener('click', e => {
   if (!linkHitBox) return;
   const { x1, x2, y1, y2 } = linkHitBox;
-  if (e.clientX >= x1 && e.clientX <= x2 && e.clientY >= y1 && e.clientY <= y2) {
+  const docY = e.clientY + window.scrollY;
+  if (e.clientX >= x1 && e.clientX <= x2 && docY >= y1 && docY <= y2) {
     window.open(PAPER_URL, '_blank', 'noopener');
   }
 });
@@ -235,37 +244,39 @@ canvas.addEventListener('click', e => {
 canvas.addEventListener('mousemove', e => {
   if (!linkHitBox) { canvas.style.cursor = ''; return; }
   const { x1, x2, y1, y2 } = linkHitBox;
-  canvas.style.cursor = (e.clientX >= x1 && e.clientX <= x2 && e.clientY >= y1 && e.clientY <= y2)
+  const docY = e.clientY + window.scrollY;
+  canvas.style.cursor = (e.clientX >= x1 && e.clientX <= x2 && docY >= y1 && docY <= y2)
     ? 'pointer' : '';
 });
 
 // ── draw text ─────────────────────────────────────────────────────────────────
-function drawText(lines) {
+function drawText(lines, scrollY) {
   const { font, titleFont, fontSize } = geo;
   ctx.textBaseline = 'alphabetic';
 
   for (const line of lines) {
+    const y = line.y - scrollY; // document coords -> viewport
     if (line.isTitle) {
       ctx.font      = titleFont;
       ctx.fillStyle = '#1e00ff';
-      ctx.fillText(line.text, line.x, line.y);
+      ctx.fillText(line.text, line.x, y);
     } else {
       ctx.font      = font;
       ctx.fillStyle = '#1a1a1a';
-      ctx.fillText(line.text, line.x, line.y);
+      ctx.fillText(line.text, line.x, y);
 
       if (line.isLink && linkHitBox) {
         // Underline "here" in blue
-        const { x1, x2, y1, y2 } = linkHitBox;
+        const { x1, x2 } = linkHitBox;
         ctx.save();
         ctx.fillStyle   = '#1e00ff';
         ctx.strokeStyle = '#1e00ff';
         ctx.lineWidth   = 1;
         // Re-draw just the "here" portion in blue
-        ctx.fillText('here', x1, line.y);
+        ctx.fillText('here', x1, y);
         ctx.beginPath();
-        ctx.moveTo(x1, line.y + 2);
-        ctx.lineTo(x2, line.y + 2);
+        ctx.moveTo(x1, y + 2);
+        ctx.lineTo(x2, y + 2);
         ctx.stroke();
         ctx.restore();
       }
@@ -283,16 +294,23 @@ function frame(ts) {
 
   stepTiger(dt);
 
-  const box = getTigerBox();
+  const scrollY = window.scrollY;
+  const box = getTigerBox(); // viewport coords (the tiger follows the cursor on screen)
+  // Layout is computed in document coords, so place the tiger in document
+  // space too. This also makes layoutDirty fire on scroll (box top shifts).
+  const docBox = box
+    ? { left: box.left, right: box.right, top: box.top + scrollY, bottom: box.bottom + scrollY, w: box.w, h: box.h, bob: box.bob }
+    : null;
 
-  if (layoutDirty(box)) {
-    layoutLines    = buildLayout(box);
-    layoutTigerBox = box ? { ...box } : null;
+  if (layoutDirty(docBox)) {
+    layoutLines    = buildLayout(docBox);
+    layoutTigerBox = docBox ? { ...docBox } : null;
     measureLinkHit(layoutLines);
+    if (scrollSpacer) scrollSpacer.style.height = contentHeight + 'px';
   }
 
   ctx.clearRect(0, 0, window.innerWidth, window.innerHeight);
-  if (layoutLines) drawText(layoutLines);
+  if (layoutLines) drawText(layoutLines, scrollY);
   drawTiger(box);
 }
 
