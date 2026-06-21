@@ -4,8 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>About Me - Leah Uriarte</title>
-    <meta name="description" content="Learn more about Leah Uriarte - Computer Science student at Harvey Mudd College, Google intern, and quantum computing researcher.">
+    <title>games</title>
+    <meta name="description" content="games by leah uriarte">
 
     <!-- Google Analytics -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-TQCD722W1F"></script>
@@ -20,29 +20,23 @@
     <link href="https://fonts.googleapis.com/css2?family=UnifrakturMaguntia&family=Archivo:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="styles.css">
     <style>
-        #tiger-canvas {
-            position: fixed;
-            inset: 0;
-            width: 100%;
-            height: 100%;
-            z-index: 1;
-            pointer-events: auto;
+        .games-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
         }
-        .tiger-avatar {
-            position: fixed;
-            top: 50%;
-            left: 75%;
-            transform: translate(-50%, -50%);
-            z-index: 2;
-            pointer-events: none;
+
+        .games-list li {
+            font-size: 1.2rem;
+            font-family: 'Archivo', sans-serif;
+            font-weight: 400;
+            line-height: 1.7;
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
         }
-        .tiger-avatar img {
-            width: 360px;
-            height: auto;
-            display: block;
-            image-rendering: pixelated;
-            image-rendering: -moz-crisp-edges;
-            image-rendering: crisp-edges;
+
+        .games-list li:last-child {
+            border-bottom: none;
         }
     </style>
 </head>
@@ -52,7 +46,7 @@
     <nav class="nav">
         <a href="index.html" class="nav-btn">home</a>
         <div class="nav-dropdown">
-            <a href="about.html" class="nav-btn active">about me</a>
+            <a href="about.html" class="nav-btn">about me</a>
             <div class="dropdown-menu">
                 <a href="about.html" class="dropdown-item">about me</a>
                 <a href="chat.html" class="dropdown-item">my interests</a>
@@ -63,15 +57,22 @@
         <a href="resume.html" class="nav-btn">resume</a>
     </nav>
 
-    <!-- Tiger canvas: renders about-me text + walking tiger -->
-    <canvas id="tiger-canvas"></canvas>
+    <!-- Games Section -->
+    <section class="about-section active" id="games">
+        <div class="about-container">
+            <div class="about-content">
+                <h2 class="about-title">games</h2>
+                <ul class="games-list">
+                    <li><a href="hmc-game.html">hmc survival</a></li>
+                    <li><a href="#">game two</a></li>
+                    <li><a href="#">game three</a></li>
+                    <li><a href="#">game four</a></li>
+                    <li><a href="#">game five</a></li>
+                </ul>
+            </div>
+        </div>
+    </section>
 
-    <!-- Avatar stays as HTML overlay, clear of the text column -->
-    <div class="tiger-avatar">
-        <img src="images/avatar-bitmap.png" alt="Leah's Avatar">
-    </div>
-
-    <script type="module" src="tiger-about.js"></script>
     <script src="script.js"></script>
 </body>
 
